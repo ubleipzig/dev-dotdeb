@@ -1,0 +1,5 @@
+# set mail host
+if [ "${SMTP_PORT_25_TCP_ADDR}" != "" ]; then
+    echo ${SMTP_NAME} | awk -F/ '{ print $2 }' > /etc/mailname
+    echo "${SMTP_PORT_25_TCP_ADDR} smtp --port ${SMTP_PORT_25_TCP_PORT}" >/etc/nullmailer/remotes
+fi;

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+useradd --create-home --home-dir /home/dev --shell /bin/bash dev
+
+su - dev -c "mkdir /home/dev/bin"
+
+wget -qO - https://getcomposer.org/installer | su - dev -c "php -- --install-dir=/home/dev/bin --filename=composer"
+
+cat >>/home/dev/.bashrc <<EOF
+export PHP_IDE_CONFIG="serverName=localhost"
+export XDEBUG_CONFIG="idekey=phpstorm"
+EOF
