@@ -4,11 +4,14 @@ set -e
 
 pecl install -f xhprof
 
+# localisation is UTC+1
+# TODO: make it configurable
 cat > /etc/php5/conf.d/20-date.ini <<EOF
 [Date]
 date.timezone = Europe/Berlin
 EOF
 
+# added xhprof extension in case anybody needs it
 cat > /etc/php5/conf.d/20-xhprof.ini <<EOF
 [xhprof]
 extension=/usr/lib/php5/20100525/xhprof.so
@@ -27,11 +30,26 @@ xdebug.profiler_output_dir = /var/lib/xdebug
 xdebug.profiler_output_name = cachegrind.out.%s
 EOF
 
+# add some memory to xcaches var cache
 cat >> /etc/php5/conf.d/20-xcache.ini <<EOF
 [xcache]
 xcache.admin.enable_auth = "off"
 xcache.size = "32M"
+xcache.var_size = "32M"
 EOF
+
+cp -a /usr/share/xcache/htdocs /var/www/xcache
+
+cat <<EOF >/etc/apache2/sites-available/00-xcache
+Alias /xcache /var/www/xcache
+
+<Directory /var/www/xcache>
+    FCGIWrapper /var/www/fcgid/php-fcgi .php
+    Options +ExecCGI
+</Directory>
+EOF
+
+a2ensite 00-xcache
 
 sed -e "s/^\(max_execution_time\)\s*=.*\$/\1 = 240/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(memory_limit\)\s*=.*\$/\1 = 512M/" -i /etc/php5/cgi/php.ini

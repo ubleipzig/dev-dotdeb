@@ -9,8 +9,8 @@ wget -q https://webgrind.googlecode.com/files/${WEBGRIND_ARCHIVE}
 unzip ${WEBGRIND_ARCHIVE} -d ${WEBGRIND_ROOT}
 rm ${WEBGRIND_ARCHIVE}
 
-cat <<EOF >/etc/apache2/sites-available/webgrind
-Alias /webgrind /usr/local/webgrind
+cat <<EOF >/etc/apache2/sites-available/00-webgrind
+Alias /webgrind /var/www/webgrind
 
 <Directory /var/www/webgrind>
     FCGIWrapper /var/www/fcgid/php-fcgi .php
@@ -18,4 +18,4 @@ Alias /webgrind /usr/local/webgrind
 </Directory>
 EOF
 
-a2ensite webgrind
+a2ensite 00-webgrind

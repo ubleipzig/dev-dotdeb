@@ -36,7 +36,7 @@ cat <<EOF>/etc/apache2/mods-available/fcgid.conf
 </IfModule>
 EOF
 
-cat <<EOF >/etc/apache2/sites-available/app
+cat <<EOF >/etc/apache2/sites-available/99-app
 Alias / /app/
 <IfModule suexec_module>
 	SuexecUserGroup dev dev
@@ -52,7 +52,7 @@ EOF
 
 a2enmod ssl rewrite suexec fcgid
 a2dissite default
-a2ensite app
+a2ensite 99-app
 
 # configure supervisord to start apache2
 cat <<EOF >/etc/supervisor/conf.d/apache2.conf
