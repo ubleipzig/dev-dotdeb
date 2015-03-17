@@ -7,17 +7,7 @@ DOCKERHOST=$(ip route show | grep -e ^default | awk -F" " '{ print $3 }')
 ##
 SETUP_DIR="/docker/setup"
 
-## work in progress to source out mysql. not yet functional
-DB_TYPE=${DB_TYPE:-mysql}
-DB_HOST=${DB_HOST:-localhost}
-DB_PORT=${DB_PORT:-3306}
-DB_POOL=${DB_POOL:-10}
-DB_ROOT=${DB_ROOT:-root}
-DB_PASS=${DB_PASS:-}
-
 APP_HOME="/app"
-APP_DB=${APP_DB:-local}
-
 LOG_DIR="/var/log"
 
 _adaptUid() {
@@ -48,20 +38,7 @@ case "$1" in
         _setupRuntime
 
         echo "Starting supervisord..."
-        /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
-
-        # start mysql server, if its on localhost
-        if [ "${APP_DB}" == "local" ]; then
-            echo "Starting MySQL..."
-            /usr/bin/supervisorctl start mysqld
-        fi;
-
-        if [ "${SMTP_PORT_25_TCP_ADDR}" != "" ]; then
-            echo "Starting Nullmailer..."
-            /usr/bin/supervisorctl start nullmailer
-        fi;
-
-        /usr/bin/supervisorctl maintail -f
+        /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
         ;;
     interactive)
         su -l dev

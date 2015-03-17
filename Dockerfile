@@ -1,6 +1,6 @@
 ### install debian ###
 FROM debian:latest
-MAINTAINER useltmann@copatec.de
+MAINTAINER u.seltmann@gmail.com
 EXPOSE 80 443 3306
 VOLUME ["/var/lib/mysql", "/var/run/mysqld", "/app", "/var/lib/xdebug"]
 ENTRYPOINT ["/docker/init"]
