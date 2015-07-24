@@ -2,22 +2,26 @@
 #
 set -e
 
-pecl install -f xhprof
+#pecl install -f xhprof
+
+# added xhprof extension in case anybody needs it
+#cat >>/etc/php5/mods-available/xhprof.ini <<EOF
+#[xhprof]
+#extension=/usr/lib/php5/20100525/xhprof.so
+#EOF
+
+#php5enmod  xhprof
 
 # localisation is UTC+1
 # TODO: make it configurable
-cat > /etc/php5/conf.d/20-date.ini <<EOF
+cat >>/etc/php5/mods-available/date.ini <<EOF
 [Date]
 date.timezone = Europe/Berlin
 EOF
 
-# added xhprof extension in case anybody needs it
-cat > /etc/php5/conf.d/20-xhprof.ini <<EOF
-[xhprof]
-extension=/usr/lib/php5/20100525/xhprof.so
-EOF
+php5enmod date
 
-cat >> /etc/php5/conf.d/20-xdebug.ini <<EOF
+cat >>/etc/php5/mods-available/xdebug.ini <<EOF
 [debugger]
 xdebug.remote_host =
 xdebug.remote_enable = On
@@ -30,17 +34,22 @@ xdebug.profiler_output_dir = /var/lib/xdebug
 xdebug.profiler_output_name = cachegrind.out.%s
 EOF
 
+php5enmod xdebug
+
+# XCACHE ###############################################################################################################
 # add some memory to xcaches var cache
-cat >> /etc/php5/conf.d/20-xcache.ini <<EOF
+cat >>/etc/php5/mods-available/xcache.ini <<EOF
 [xcache]
-xcache.admin.enable_auth = "off"
+xcache.admin.enable_auth = "Off"
 xcache.size = "32M"
 xcache.var_size = "32M"
 EOF
 
+php5enmod xcache
+
 cp -a /usr/share/xcache/htdocs /var/www/xcache
 
-cat <<EOF >/etc/apache2/sites-available/00-xcache
+cat >/etc/apache2/sites-available/00-xcache <<EOF
 Alias /xcache /var/www/xcache
 
 <Directory /var/www/xcache>
@@ -50,6 +59,28 @@ Alias /xcache /var/www/xcache
 EOF
 
 a2ensite 00-xcache
+########################################################################################################################
+
+# PHPINFO ##############################################################################################################
+mkdir /var/www/phpinfo
+
+cat >/var/www/phpinfo/index.php <<EOF
+<?php
+phpinfo();
+?>
+EOF
+
+cat >/etc/apache2/sites-available/00-phpinfo <<EOF
+Alias /phpinfo /var/www/phpinfo
+
+<Directory /var/www/phpinfo>
+    FCGIWrapper /var/www/fcgid/php-fcgi .php
+    Options +ExecCGI
+</Directory>
+EOF
+
+a2ensite 00-phpinfo
+########################################################################################################################
 
 sed -e "s/^\(max_execution_time\)\s*=.*\$/\1 = 240/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(memory_limit\)\s*=.*\$/\1 = 512M/" -i /etc/php5/cgi/php.ini
