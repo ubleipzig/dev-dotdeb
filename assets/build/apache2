@@ -2,7 +2,7 @@
 
 set -e
 
-cat >/etc/apache2/mods-available/fcgid.conf <<EOF 
+cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 <IfModule mod_fcgid.c>
 	FcgidConnectTimeout 20
 	<FilesMatch \.(php|php5)\$>
@@ -36,7 +36,7 @@ cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 </IfModule>
 EOF
 
-cat >/etc/apache2/sites-available/99-app <<EOF 
+cat >/etc/apache2/sites-available/99-app <<EOF
 Alias / /app/
 <IfModule suexec_module>
 	SuexecUserGroup dev dev
@@ -50,19 +50,19 @@ Alias / /app/
 EOF
 
 a2enmod ssl rewrite suexec fcgid
-a2dissite 000-default
-a2ensite 99-app
+a2ensite 99-app default-ssl
 
 # configure supervisord to start apache2
-cat >/etc/supervisor/conf.d/apache2.conf <<EOF 
+cat >/etc/supervisor/conf.d/apache2.conf <<EOF
 [program:apache2]
 priority = 10
 environment = HOME="/var/www"
-command = /docker/run/apache2
+command = /usr/sbin/apache2ctl -DFOREGROUND -k start
+redirect_stderr = true
 user = root
 autostart = true
 autorestart = true
-stopsignal = QUIT
+stopsignal = KILL
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 EOF

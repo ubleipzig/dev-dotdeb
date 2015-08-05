@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # adding dot-deb repository
 RUN apt-get update \
  && apt-get -y dist-upgrade \
- && apt-get install -y wget less vim supervisor nullmailer
+ && apt-get install -y wget less vim supervisor nullmailer graphviz
 
 RUN echo "deb http://packages.dotdeb.org wheezy all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
