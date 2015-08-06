@@ -3,12 +3,20 @@
 #
 set -e
 
+if [ ! -p /var/spool/nullmailer/trigger ]; then
+    rm -f /var/spool/nullmailer/trigger
+    mkfifo /var/spool/nullmailer/trigger
+fi
+
+chown mail:root /var/spool/nullmailer/trigger
+chmod 0622 /var/spool/nullmailer/trigger
+
 cat > /etc/supervisor/conf.d/nullmailer.conf <<EOF
 [program:nullmailer]
 priority = 20
 directory = /tmp
-command = /docker/run/nullmailer
-user = root
+command = /usr/sbin/nullmailer-send
+user = mail
 autostart = false
 autorestart = true
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log

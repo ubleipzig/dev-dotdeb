@@ -32,8 +32,8 @@ cat > /etc/supervisor/conf.d/mysqld.conf <<EOF
 [program:mysqld]
 priority = 20
 directory = /tmp
-command = /docker/run/mysqld
-user = root
+command = /usr/bin/mysqld_safe
+user = mysql
 autostart = false
 autorestart = true
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log

@@ -18,7 +18,7 @@ _adaptUid() {
     sed -e "s!^\(dev:x\):[0-9]\+:[0-9]\+:\(.*\)\$!\1:${APP_UID}:${APP_GID}:\2!" -i /etc/passwd
     sed -e "s!^\(dev:x\):[0-9]\+:\(.*\)\$!\1:${APP_GID}:\2!" -i /etc/group
 
-    chown dev:dev /home/dev /var/www/fcgid /var/www/webgrind /var/lib/xdebug -R
+    chown dev:dev /home/dev -R
 }
 
 _setupRuntime() {
