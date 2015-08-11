@@ -40,11 +40,12 @@ case "$1" in
         echo "Starting supervisord..."
         /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
         ;;
-    interactive)
-        su -l dev
-        ;;
     *)
-    echo "unrecognized command: $i";
+    if [ ! -x "/docker/scripts/$1" ];then
+        echo "unrecognized command: $1";
+    fi;
+
+    exec /docker/scripts/$1
     ;;
 esac
 
