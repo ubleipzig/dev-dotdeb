@@ -37,12 +37,12 @@ cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 EOF
 
 cat >/etc/apache2/sites-available/99-app <<EOF
-Alias / /app/
+Alias / ${APP_HOME}/
 <IfModule suexec_module>
 	SuexecUserGroup dev dev
 </IfModule>
 
-<Directory /app>
+<Directory ${APP_HOME}>
 	FCGIWrapper /var/www/fcgid/php-fcgi .php
 	Options +ExecCGI
 	AllowOverride All

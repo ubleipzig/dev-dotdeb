@@ -7,7 +7,6 @@ DOCKERHOST=$(ip route show | grep -e ^default | awk -F" " '{ print $3 }')
 ##
 SETUP_DIR="/docker/setup"
 
-APP_HOME="/app"
 LOG_DIR="/var/log"
 
 _adaptUid() {

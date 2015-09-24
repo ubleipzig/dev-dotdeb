@@ -18,6 +18,7 @@ RUN echo "deb http://packages.dotdeb.org wheezy all" >/etc/apt/sources.list.d/do
         php5-cgi php5-cli php-pear php5-curl php5-gd php5-intl php5-ldap php5-readline php5-mcrypt php5-mysqlnd php5-sqlite php5-xcache php5-xdebug php5-xsl php5-xhprof php5-dev \
         make mysql-client mysql-server unzip
 
+ENV APP_HOME /app
 COPY assets/build /docker/build
 RUN chmod 755 /docker/build/init \
  && /docker/build/init
