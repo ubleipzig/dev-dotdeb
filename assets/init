@@ -28,24 +28,25 @@ _setupRuntime() {
     done
 }
 
+echo "Setting up owner/group of dev..."
+_adaptUid
+
+echo "Setting up runtime environment..."
+_setupRuntime
+
 case "$1" in
     run)
-        echo "Setting up owner/group of dev..."
-        _adaptUid
-
-        echo "Setting up runtime environment..."
-        _setupRuntime
-
         echo "Starting supervisord..."
         /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
         ;;
     *)
-    if [ ! -x "/docker/scripts/$1" ];then
-        echo "unrecognized command: $1";
-    fi;
+        if [ ! -x "/docker/scripts/$1" ];then
+            echo "unrecognized command: $1";
+            exit 1;
+        fi;
 
-    exec /docker/scripts/$1
-    ;;
+        exec /docker/scripts/$1
+        ;;
 esac
 
 exit 0
