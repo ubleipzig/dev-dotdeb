@@ -11,7 +11,7 @@ RUN apt-get update \
  && apt-get -y dist-upgrade \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales
 
-RUN echo "deb http://packages.dotdeb.org wheezy all" >/etc/apt/sources.list.d/dotdeb.list \
+RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker apache2-suexec libapache2-mod-fcgid \
