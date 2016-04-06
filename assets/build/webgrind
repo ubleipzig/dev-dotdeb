@@ -10,7 +10,7 @@ wget -q https://github.com/${WEBGRIND_FORK}/webgrind/archive/${WEBGRIND_ARCHIVE}
 unzip ${WEBGRIND_ARCHIVE}.zip -d ${WEBGRIND_ROOT}
 rm ${WEBGRIND_ARCHIVE}.zip
 
-cat <<EOF >/etc/apache2/sites-available/00-webgrind
+cat <<EOF >/etc/apache2/sites-available/00-webgrind.conf
 Alias /webgrind /var/www/webgrind-${WEBGRIND_ARCHIVE}
 
 <Directory /var/www/webgrind-${WEBGRIND_ARCHIVE}>

@@ -21,7 +21,7 @@ chown -R mysql:root var/run/mysqld
 if [ "${DB_HOST}" == "localhost" ]; then
 	if [ ! -d /var/lib/mysql/mysql ]; then
 		echo "Installing database..."
-		cp /usr/share/doc/mysql-server-5.6/examples/my-default.cnf /usr/share/mysql/
+		zcat /usr/share/doc/mysql-server-5.5/examples/my-huge.cnf.gz >/usr/share/mysql/my-default.cnf
 		mysql_install_db --user=mysql >/dev/null 2>&1
 
 		# start mysql server
@@ -56,4 +56,3 @@ if [ "${DB_HOST}" == "localhost" ]; then
 	echo "Setting up MySQL-Server for autostart ..."
 	sed -e 's/^\(\s*autostart\s*=\s*\).*$/\1true/' -i /etc/supervisor/conf.d/mysqld.conf
 fi;
-

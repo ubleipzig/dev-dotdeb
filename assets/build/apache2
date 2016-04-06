@@ -29,14 +29,14 @@ cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 	FcgidMaxRequestLen 8100000
 	<Directory "/var/www/fcgid/">
 		AllowOverride None
-		Options +ExecCGI MultiViews -Indexes
+		Options +ExecCGI +MultiViews -Indexes
 		Order allow,deny
 		Allow from all
 	</Directory>
 </IfModule>
 EOF
 
-cat >/etc/apache2/sites-available/99-app <<EOF
+cat >/etc/apache2/sites-available/99-app.conf <<EOF
 Alias / ${APP_HOME}/
 <IfModule suexec_module>
 	SuexecUserGroup dev dev
