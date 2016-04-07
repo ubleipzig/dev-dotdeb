@@ -46,6 +46,7 @@ Alias / ${APP_HOME}/
 	FCGIWrapper /var/www/fcgid/php-fcgi .php
 	Options +ExecCGI
 	AllowOverride All
+	Require all granted
 </Directory>
 EOF
 
