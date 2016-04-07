@@ -56,3 +56,4 @@ if [ "${DB_HOST}" == "localhost" ]; then
 	echo "Setting up MySQL-Server for autostart ..."
 	sed -e 's/^\(\s*autostart\s*=\s*\).*$/\1true/' -i /etc/supervisor/conf.d/mysqld.conf
 fi;
+
