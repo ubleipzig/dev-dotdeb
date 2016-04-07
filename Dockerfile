@@ -9,7 +9,7 @@ CMD ["run"]
 # adding dot-deb repository
 RUN apt-get update \
  && apt-get -y dist-upgrade \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat
 
 RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
