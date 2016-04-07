@@ -2,54 +2,13 @@
 
 set -e
 
-cat >/etc/apache2/mods-available/fcgid.conf <<EOF
-<IfModule mod_fcgid.c>
-	FcgidConnectTimeout 20
-	<FilesMatch \.(php|php5)\$>
-		AddHandler fcgid-script .php .php5
-	</FilesMatch>
-	SocketPath /var/lib/apache2/fcgid/sock
-	IdleTimeout 3600
-	IdleScanInterval 120
-	BusyTimeout 300
-	BusyScanInterval 120
-	ErrorScanInterval 3
-	ZombieScanInterval 3
-	ProcessLifeTime 30
-	SpawnScoreUpLimit 10
-	SpawnScore 1
-	TerminationScore 2
-	MaxProcessCount 5
-	DefaultMaxClassProcessCount 2
-	DefaultMinClassProcessCount 1
-	IPCConnectTimeout 3600
-	IPCCommTimeout 3600
-	MaxRequestsPerProcess 20
-	Passheader AUTHORIZATION
-	FcgidMaxRequestLen 8100000
-	<Directory "/var/www/fcgid/">
-		AllowOverride None
-		Options +ExecCGI +MultiViews -Indexes
-		Order allow,deny
-		Allow from all
-	</Directory>
-</IfModule>
-EOF
-
 cat >/etc/apache2/sites-available/99-app.conf <<EOF
-Alias / ${APP_HOME}/
-<IfModule suexec_module>
-	SuexecUserGroup dev dev
-</IfModule>
-
-<Directory ${APP_HOME}>
-	FCGIWrapper /var/www/fcgid/php-fcgi .php
-	Options +ExecCGI
-	AllowOverride All
-</Directory>
+Alias / ${APP_HOME}
+DirectoryIndex /index.php index.php
+ProxyPassMatch ^/(.*\.php(/.*)?)\$ fcgi://127.0.0.1:9000${APP_HOME}/\$1
 EOF
 
-a2enmod ssl rewrite suexec fcgid
+a2enmod ssl rewrite proxy_fcgi
 a2ensite 99-app default-ssl
 
 # configure supervisord to start apache2
@@ -62,7 +21,7 @@ redirect_stderr = true
 user = root
 autostart = true
 autorestart = true
-stopsignal = KILL
+stopasgroup = true
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 EOF

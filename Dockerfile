@@ -14,8 +14,8 @@ RUN apt-get update \
 RUN echo "deb http://packages.dotdeb.org jessie all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker apache2-suexec libapache2-mod-fcgid \
-        php5-cgi php5-cli php-pear php5-curl php5-gd php5-intl php5-ldap php5-readline php5-mcrypt php5-mysqlnd php5-sqlite php5-xcache php5-xdebug php5-xsl php5-xhprof php5-dev \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker \
+        php5-fpm php5-cli php-pear php5-curl php5-gd php5-intl php5-ldap php5-readline php5-mcrypt php5-mysqlnd php5-sqlite php5-xcache php5-xdebug php5-xsl php5-xhprof php5-dev \
         make mysql-client mysql-server unzip
 
 ENV APP_HOME /app

@@ -52,7 +52,7 @@ case "$1" in
             exit 1;
         fi;
 
-        exec /docker/scripts/$1
+        exec /docker/scripts/$1 $*
         ;;
 esac
 

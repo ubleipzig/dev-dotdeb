@@ -3,4 +3,4 @@
 # set xdebug host
 sed -e "s/^\(xdebug\.remote_host\).*\$/\1 = ${DOCKERHOST}/" -i /etc/php5/mods-available/xdebug.ini
 
-chown dev:dev /var/www/fcgid /var/lib/xdebug -R
+chown dev:dev /var/lib/xdebug -R

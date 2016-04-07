@@ -1,0 +1,3 @@
+#!/bin/bash
+
+su -l dev -c "cd ${APP_HOME};composer "

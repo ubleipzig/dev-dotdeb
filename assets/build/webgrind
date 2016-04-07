@@ -12,11 +12,8 @@ rm ${WEBGRIND_ARCHIVE}.zip
 
 cat <<EOF >/etc/apache2/sites-available/00-webgrind.conf
 Alias /webgrind /var/www/webgrind-${WEBGRIND_ARCHIVE}
-
-<Directory /var/www/webgrind-${WEBGRIND_ARCHIVE}>
-    FCGIWrapper /var/www/fcgid/php-fcgi .php
-    Options +ExecCGI
-</Directory>
+DirectoryIndex /index.php index.php
+ProxyPassMatch ^/webgrind/(.*\.php(/.*)?)\$ fcgi://127.0.0.1:9000/var/www/webgrind-${WEBGRIND_ARCHIVE}/\$1
 EOF
 
 a2ensite 00-webgrind
