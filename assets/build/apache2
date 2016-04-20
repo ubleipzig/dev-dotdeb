@@ -63,7 +63,7 @@ redirect_stderr = true
 user = root
 autostart = true
 autorestart = true
-stopsignal = KILL
+stopasgroup = true
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 EOF
