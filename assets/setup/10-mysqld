@@ -47,6 +47,9 @@ if [ "${DB_HOST}" == "localhost" ]; then
 		echo "Creating debian-sys-maint user..."
 		mysql -uroot -e "GRANT ALL PRIVILEGES on *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION;"
 
+        echo "Granting root permission from Docker Host ..."
+        mysql -uroot -e "GRANT all PRIVILEGES on *.* to root@${DOCKERHOST} WITH GRANT OPTION;"
+
 		echo "Setting root user password"
 		/usr/bin/mysqladmin -u root password "${DB_PASS}"
 
