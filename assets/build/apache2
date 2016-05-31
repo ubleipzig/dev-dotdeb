@@ -26,7 +26,7 @@ cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 	IPCCommTimeout 3600
 	MaxRequestsPerProcess 20
 	Passheader AUTHORIZATION
-	FcgidMaxRequestLen 8100000
+	FcgidMaxRequestLen 16384000
 	<Directory "/var/www/fcgid/">
 		AllowOverride None
 		Options +ExecCGI +MultiViews -Indexes
