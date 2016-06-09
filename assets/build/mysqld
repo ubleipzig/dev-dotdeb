@@ -36,6 +36,7 @@ command = /usr/bin/mysqld_safe
 user = mysql
 autostart = false
 autorestart = true
+stopasgroup = true
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 EOF
