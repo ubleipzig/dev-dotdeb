@@ -3,8 +3,18 @@
 # create user
 useradd --create-home --home-dir /home/dev --shell /bin/bash dev
 
+# create .my.cnf
+cat >>/home/dev/.my.cnf <<EOF
+[client]
+user=root
+EOF
+
 # install composer
 wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# install phing
+pear channel-discover pear.phing.info
+pear install phing/phing
 
 # set environment variables
 cat >>/home/dev/.profile <<EOF

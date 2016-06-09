@@ -49,7 +49,7 @@ php5enmod xcache
 
 cp -a /usr/share/xcache/htdocs /var/www/xcache
 
-cat >/etc/apache2/sites-available/00-xcache <<EOF
+cat >/etc/apache2/sites-available/00-xcache.conf <<EOF
 Alias /xcache /var/www/xcache
 
 <Directory /var/www/xcache>
@@ -70,7 +70,7 @@ phpinfo();
 ?>
 EOF
 
-cat >/etc/apache2/sites-available/00-phpinfo <<EOF
+cat >/etc/apache2/sites-available/00-phpinfo.conf <<EOF
 Alias /phpinfo /var/www/phpinfo
 
 <Directory /var/www/phpinfo>
@@ -88,3 +88,5 @@ sed -e "s/^\(display_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(display_startup_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(post_max_size\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(upload_max_filesize\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
+sed -e "s/^;\?\s*\(always_populate_raw_post_data\)\s*=.*\$/\1 = -1/" -i /etc/php5/cgi/php.ini
+sed -e "s/^;\?\s*\(max_input_vars\)\s*=.*\$/\1 = 1500/" -i /etc/php5/cgi/php.ini

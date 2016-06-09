@@ -26,17 +26,17 @@ cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 	IPCCommTimeout 3600
 	MaxRequestsPerProcess 20
 	Passheader AUTHORIZATION
-	FcgidMaxRequestLen 8100000
+	FcgidMaxRequestLen 16384000
 	<Directory "/var/www/fcgid/">
 		AllowOverride None
-		Options +ExecCGI MultiViews -Indexes
+		Options +ExecCGI +MultiViews -Indexes
 		Order allow,deny
 		Allow from all
 	</Directory>
 </IfModule>
 EOF
 
-cat >/etc/apache2/sites-available/99-app <<EOF
+cat >/etc/apache2/sites-available/99-app.conf <<EOF
 Alias / ${APP_HOME}/
 <IfModule suexec_module>
 	SuexecUserGroup dev dev
@@ -46,6 +46,7 @@ Alias / ${APP_HOME}/
 	FCGIWrapper /var/www/fcgid/php-fcgi .php
 	Options +ExecCGI
 	AllowOverride All
+	Require all granted
 </Directory>
 EOF
 
@@ -62,7 +63,7 @@ redirect_stderr = true
 user = root
 autostart = true
 autorestart = true
-stopsignal = KILL
+stopasgroup = true
 stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
 EOF
