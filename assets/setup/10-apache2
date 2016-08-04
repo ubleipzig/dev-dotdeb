@@ -26,7 +26,7 @@ cat >/etc/apache2/mods-available/fcgid.conf <<EOF
 	IPCCommTimeout 3600
 	MaxRequestsPerProcess 20
 	Passheader AUTHORIZATION
-	FcgidMaxRequestLen 16384000
+	FcgidMaxRequestLen ${FCGID_MAX_REQUEST_LEN}
 	<Directory "/var/www/fcgid/">
 		AllowOverride None
 		Options +ExecCGI +MultiViews -Indexes
@@ -39,7 +39,7 @@ EOF
 cat >/etc/apache2/sites-available/99-app <<EOF
 Alias / ${APP_HOME}/
 <IfModule suexec_module>
-	SuexecUserGroup dev dev
+	SuexecUserGroup ${APP_USER} ${APP_USER}
 </IfModule>
 
 <Directory ${APP_HOME}>
@@ -49,7 +49,7 @@ Alias / ${APP_HOME}/
 </Directory>
 EOF
 
-a2enmod ssl rewrite suexec fcgid
+a2enmod ssl rewrite suexec fcgid shib2
 a2ensite 99-app default-ssl
 
 # configure supervisord to start apache2

@@ -10,16 +10,3 @@ fi
 
 chown mail:root /var/spool/nullmailer/trigger
 chmod 0622 /var/spool/nullmailer/trigger
-
-cat > /etc/supervisor/conf.d/nullmailer.conf <<EOF
-[program:nullmailer]
-priority = 20
-directory = /tmp
-command = /usr/sbin/nullmailer-send
-user = mail
-autostart = false
-autorestart = true
-stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-EOF
-

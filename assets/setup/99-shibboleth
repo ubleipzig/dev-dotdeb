@@ -1,0 +1,169 @@
+#!/bin/bash
+
+test -d /var/run/shibboleth || install -o _shibd -d /var/run/shibboleth /var/log/shibboleth
+
+cat >/etc/shibboleth/dfn-aai.pem <<EOF
+-----BEGIN CERTIFICATE-----
+MIIFfzCCBGegAwIBAgIHF2SJb0dzzzANBgkqhkiG9w0BAQsFADBeMQswCQYDVQQG
+EwJERTETMBEGA1UEChMKREZOLVZlcmVpbjEZMBcGA1UECxMQR2VzY2hhZWZ0c3N0
+ZWxsZTEfMB0GA1UEAxMWREZOLVZlcmVpbi1HUy1DQSAtIEcwMjAeFw0xNDA0MDkw
+ODU5MTFaFw0xNzA0MDgwODU5MTFaMIGFMQswCQYDVQQGEwJERTEPMA0GA1UECBMG
+QmVybGluMQ8wDQYDVQQHEwZCZXJsaW4xEzARBgNVBAoTCkRGTi1WZXJlaW4xGTAX
+BgNVBAsTEEdlc2NoYWVmdHNzdGVsbGUxJDAiBgNVBAMTG0dSUDogREZOLUFBSSBN
+ZXRhZGF0YXNpZ25lcjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANUR
+fxXgew5yir0FWnFXX7R3jqms00mbf5hrp4m/RPm0g3eIvmGcWHyw3L3p1UkygGUz
+hLlPY74hXCgP+iiQOxTxO3nxtpA7CQmduhotVGadj9xfRJeDp5f+b9y1ssHNnbNz
+QhvhxXbOytT4KAiKy958V8Bmi0YZeWlbGTUvnDuYKwMm/KeRqLqoH3mVGWd9N5+e
+rvU5zdQ2KU60YCxQX/Tqhl4rjxAJCdtPtxuSeEpPSn/zMPTNToSXG/HqDbLMn+U8
+yc8zMNFKbzOeH4yC1zobZ5IdtZINjb7yTc8YjTYLFX5Uun3D2JgrodRMp3KSyd/0
+yNuvIVyzuXpfhkdP8OECAwEAAaOCAhgwggIUMC8GA1UdIAQoMCYwEQYPKwYBBAGB
+rSGCLAEBBAMBMBEGDysGAQQBga0hgiwCAQQDATAJBgNVHRMEAjAAMAsGA1UdDwQE
+AwIHgDATBgNVHSUEDDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQUDvGJWmiD0xDBpWkM
+o7BdbPqAQ1AwHwYDVR0jBBgwFoAUeaJiL87xBjlS53ZtYsfem2p1S0kwgZEGA1Ud
+HwSBiTCBhjBBoD+gPYY7aHR0cDovL2NkcDEucGNhLmRmbi5kZS9kZm4tdmVyZWlu
+LWdzLWNhL3B1Yi9jcmwvZ19jYWNybC5jcmwwQaA/oD2GO2h0dHA6Ly9jZHAyLnBj
+YS5kZm4uZGUvZGZuLXZlcmVpbi1ncy1jYS9wdWIvY3JsL2dfY2FjcmwuY3JsMIHf
+BggrBgEFBQcBAQSB0jCBzzAzBggrBgEFBQcwAYYnaHR0cDovL29jc3AucGNhLmRm
+bi5kZS9PQ1NQLVNlcnZlci9PQ1NQMEsGCCsGAQUFBzAChj9odHRwOi8vY2RwMS5w
+Y2EuZGZuLmRlL2Rmbi12ZXJlaW4tZ3MtY2EvcHViL2NhY2VydC9nX2NhY2VydC5j
+cnQwSwYIKwYBBQUHMAKGP2h0dHA6Ly9jZHAyLnBjYS5kZm4uZGUvZGZuLXZlcmVp
+bi1ncy1jYS9wdWIvY2FjZXJ0L2dfY2FjZXJ0LmNydDANBgkqhkiG9w0BAQsFAAOC
+AQEAf3gv6SbxfQrMHzx+iztTBC4HmKNrIQ5oPVkm/k2aYJRTZT6nQyjHv+aKmAg3
+ht5yBKmEPE7SUrKWxC4Iv8s40XiiMJRX/3T9JTRkwUEVLFmVVM+AcGJokAog2hS8
+AuRXoZWRvDsKlHn/PP0ZFDw35vgtAa3s86G+3GIxIiy4DpNqXLBjq+7JlMFTQRaf
+Gn1wFU/Yd9mymcN8hzH8RDvhUcEOBATScEdm+KFZbhykquA1CR4pmhaffEiavj6/
+0LpvwN9NQRv8n/JzqA8W1SsZPwCg342LqIqcGeTve3e2joyNyCWHuNYJQjTYur6o
+hpNRqAmlu7VxPez3ZzBpI6i5aw==
+-----END CERTIFICATE-----
+EOF
+
+cat >/etc/shibboleth/sp-cert.pem <<EOF
+-----BEGIN CERTIFICATE-----
+MIIC5TCCAc2gAwIBAgIJAMTHl5c6BBC0MA0GCSqGSIb3DQEBBQUAMBUxEzARBgNV
+BAMTCmRldi1kb3RkZWIwHhcNMTYwODA0MTMwNzQ3WhcNMjYwODAyMTMwNzQ3WjAV
+MRMwEQYDVQQDEwpkZXYtZG90ZGViMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEAuU5yPc7A8TmYSOkcA5WexnYdnbuPgIZV6pfCbWAlnsHM7tF2Y2nPM0x3
+WIQD6iC2zNQrGa3vdjRDpFNZLZELqC4pCUj3kunLG6DYE5QL+8xuukJmt5OXksXn
+wc+8kY4DAu3M/DnS0y6P4UGFMcgj8wZ6xZpzdSLRGqHx4a+dtuORy28sHEoChRqE
+IbK2RdHvwIaOKttl1gjILgMKx7QgtBfoTk6iouC24ez9cpQ7zewDSQ9alzUbd7PP
+xJg59pjlIZ1tL65TAMRXYy5sKUVONVx0u6znntpxWBfWC0vaB+LtJcPRNNfr3hx/
+2rerB5wcgJsdqkI38BuiFF9iDyogSwIDAQABozgwNjAVBgNVHREEDjAMggpkZXYt
+ZG90ZGViMB0GA1UdDgQWBBRj9FbPgOUNEIdgS1QtP6+ufIHx4DANBgkqhkiG9w0B
+AQUFAAOCAQEAguatA2EtGF7ZrW+xJ7O7qymiLO90QKyIopCXdTeOs/Zcylo+0d8J
+FKvbEFAOc3cfPwKfwvOg9yFzAFjpdIPqu+jPWgBG3EA/g0vR8SI31NpI4mPiSnXt
+aUpWu42KFIMoHiELletPXan6jKHfHKl+SqTAY1ifVG7qLjSTrxihvn+zhrgKbai4
+2c48v2xg1Q1rv11DKWB61y2xhhgOIYlbfsiKlbIznGVDyeBaEd0yF25NgByfLbx1
+bcpYpzl5TERBGs27fizTDKUq3hszXzgq3iuo8vdXiFGBdJ0oZXvuTTlSJF0CPQ7K
+2mj+QMjgmZXcmRJtE9dC7iGXgREs3v12HA==
+-----END CERTIFICATE-----
+EOF
+
+cat >/etc/shibboleth/sp-key.pem <<EOF
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC5TnI9zsDxOZhI
+6RwDlZ7Gdh2du4+AhlXql8JtYCWewczu0XZjac8zTHdYhAPqILbM1CsZre92NEOk
+U1ktkQuoLikJSPeS6csboNgTlAv7zG66Qma3k5eSxefBz7yRjgMC7cz8OdLTLo/h
+QYUxyCPzBnrFmnN1ItEaofHhr52245HLbywcSgKFGoQhsrZF0e/Aho4q22XWCMgu
+AwrHtCC0F+hOTqKi4Lbh7P1ylDvN7ANJD1qXNRt3s8/EmDn2mOUhnW0vrlMAxFdj
+LmwpRU41XHS7rOee2nFYF9YLS9oH4u0lw9E01+veHH/at6sHnByAmx2qQjfwG6IU
+X2IPKiBLAgMBAAECggEAPphrKsm+jz2/XVGxLtzJx4x6sJ98+BNozlf5S20hCCG7
+EikbbrV9UnzQC8x8bggi98nrzT7eFvXMq6OkCipm36bIIeTODIiBHZIVq3dlHOeP
+t8daX0Sx/NhxUxzTO+/WwJSHm+QEfWXLIHI7hfdvfVaA/mMQAU+DhxWRWYUzJ2Xg
+4eTbYEI+MThaSazrDgL9a0lgv5/GlNd7xwL0qTDJBNnnYigKHJCiie0eF51Ej5NO
+S8HbJakIb1DipSOnQuzPpMD82x4QMs6CICcF6c/TO6+vl2D+C9uLMCRwqTn3B20B
+oqgxZhLKVddRMyzPWMsTkYObNSripTgwV5/M/pXH4QKBgQDajOxuhFG104j8KZMb
+t6VBEBKBTNFDHM1jyLQHHXFy75W67tEwIEP3BLLwEOGPugNesjpEVwHdWzuSjIpS
+yGAYOGca5TPZrkXgFbi70c39j1YFNe7IdJyye0cxUm8tGSpS3ugL0ntI4kWZtiIq
+xKsenwmVz/O42+xI6DYoYqiqWQKBgQDZDze5EiJ0wcZQapF50akXtXCOvZvKjcY+
+UmemKIVOn+juQccVKPX8f5Y9J6epUNoHGceGDjIzZimJQyzdyLa5U69CrbVjUVpC
+rfVIiPxDinJD3kTBJCnSD+iGZ9auuGq+IOhxwGWPJ/KpzBMIKgcqvfA0+jjCMa+q
+ZiPx7WqDQwKBgB8EQwXIR6RrehR3fgZAAPcD5extz4Eb1FZmBI7B8fji4bge7pdK
+7Ppgs1h4vNpeBt5oovZR9tTIfuLkiTkIcQLe9lsNzlcFcatEyev18asbrZSdu969
+FgQKlOb+EQMwgB40vm/3FkIYwtH21FCHitWUspKNacSBib4rHoyKu+85AoGAe1pG
+lIpVwnyMsw6c9dnMeojGGphufMHtM2WpOag1eeUufpgrBz9r676mJsLuaS5leTuR
+RAG1Tbh1Smg+ixuRm+iO5RnKx1JoNRSfHEWc9tUq8p7R++ENUy9vOVKxkkGDh+Ez
+t9Fa5ewR36T1++HGiOfAJps8vj92USQSsV329fkCgYEAzcPskYLS0+Kd1F7bvGo8
+K6fu+r7tvoUq1aCigclBWsLx5cWCq74tNYZTqE+Co8bQilh/+6MERi2IDiBY34d1
++7Nmd3le3en2bkySJ9mrIm9bUPzH8m6SAoiiqVlKID9DQfhhOrUI1FZ8b2nP66Gf
+H2zBcxL4okxF+zqMuIOJ0Jw=
+-----END PRIVATE KEY-----
+EOF
+
+chmod 600 /etc/shibboleth/*.pem
+chown _shibd:_shibd /etc/shibboleth/*.pem
+
+cat >/etc/apache2/conf.d/shibboleth.conf <<EOF
+ServerName ${SHIB_HOSTNAME}
+UseCanonicalName On
+EOF
+
+if [ "${SHIB_IDP_ENTITY_ID}" != "" ];then
+	SHIB_SSO_ATTRS="entityID=\"${SHIB_IDP_ENTITY_ID}\""
+elif [ "${SHIB_IDP_DISCOVERY_URL}" != "" ];then
+	SHIB_SSO_ATTRS="discoveryProtocol=\"SAMLDS\" discoveryURL=\"${SHIB_IDP_DISCOVERY_URL}\""
+else
+	echo "you have either to provide the SHIB_IDP_DISCOVERY_URL or the SHIB_IDP_ENTITY_ID
+environment variable in order to correctly set up shibboleth. exiting ...";
+	exit 1;
+fi
+
+METADATA_PROVIDER_DFN='
+        <MetadataProvider type="XML" uri="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml" backingFilePath="federation-metadata.xml" reloadInterval="7200">
+            <MetadataFilter type="RequireValidUntil" maxValidityInterval="2419200"/>
+            <MetadataFilter type="Signature" certificate="/etc/shibboleth/dfn-aai.pem"/>
+        </MetadataProvider>
+'
+
+METADATA_PROVIDER_LOCAL='
+        <MetadataProvider type="XML" file="partner-metadata.xml"/>
+'
+
+cat >/etc/shibboleth/shibboleth2.xml <<EOF
+<SPConfig xmlns="urn:mace:shibboleth:2.0:native:sp:config"
+    xmlns:conf="urn:mace:shibboleth:2.0:native:sp:config"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    clockSkew="180">
+
+    <ApplicationDefaults entityID="${SHIB_SP_ENTITY_ID}" REMOTE_USER="eppn persistent-id targeted-id">
+
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem" checkAddress="false" handlerSSL="true" cookieProps="https" handlerURL="${SHIB_HANDLER_URL}">
+            <SSO ${SHIB_SSO_ATTRS}>
+              SAML2 SAML1
+            </SSO>
+            <Logout>SAML2 Local</Logout>
+            <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
+            <Handler type="Status" Location="/Status" acl="${DOCKERHOST} 127.0.0.1 ::1"/>
+            <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+            <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+        </Sessions>
+
+        <Errors supportContact="root@localhost"
+            helpLocation="/about.html"
+            styleSheet="/shibboleth-sp/main.css"/>
+
+        ${METADATA_PROVIDER_DFN}
+
+        <AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map.xml"/>
+        <AttributeResolver type="Query" subjectMatch="true"/>
+        <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+        <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
+    </ApplicationDefaults>
+    <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+    <ProtocolProvider type="XML" validate="true" reloadChanges="false" path="protocols.xml"/>
+</SPConfig>
+EOF
+
+cat >/etc/supervisor/conf.d/shibd.conf <<EOF
+[program:shibd]
+priority = 20
+directory = /var/run/shibboleth
+command = shibd -f -c /etc/shibboleth/shibboleth2.xml -F
+user = _shibd
+autostart = true
+autorestart = true
+stopasgroup = true
+stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+EOF

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+cat >>/etc/php5/mods-available/xdebug.ini <<EOF
+[debugger]
+xdebug.remote_host =
+xdebug.remote_enable = On
+xdebug.remote_cookie_expire_time = 3600
+xdebug.max_nesting_level = 400
+
+[profiler]
+xdebug.profiler_enable_trigger = On
+xdebug.profiler_output_dir = /var/lib/xdebug
+xdebug.profiler_output_name = cachegrind.out.%s
+EOF
+
+php5enmod xdebug
