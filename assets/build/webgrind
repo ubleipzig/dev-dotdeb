@@ -2,15 +2,11 @@
 
 set -e
 
-WEBGRIND_ARCHIVE="1.1.0"
-WEBGRIND_FORK="rovangju"
-WEBGRIND_ROOT="/var/www"
-
 wget -q https://github.com/${WEBGRIND_FORK}/webgrind/archive/${WEBGRIND_ARCHIVE}.zip
-unzip ${WEBGRIND_ARCHIVE}.zip -d ${WEBGRIND_ROOT}
+unzip ${WEBGRIND_ARCHIVE}.zip -d /var/www/
 rm ${WEBGRIND_ARCHIVE}.zip
 
-cat <<EOF >/etc/apache2/sites-available/00-webgrind
+cat >/etc/apache2/sites-available/00-webgrind  <<EOF
 Alias /webgrind /var/www/webgrind-${WEBGRIND_ARCHIVE}
 
 <Directory /var/www/webgrind-${WEBGRIND_ARCHIVE}>

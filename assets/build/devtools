@@ -1,16 +1,10 @@
 #!/bin/bash
 
-# create user
-useradd --create-home --home-dir /home/dev --shell /bin/bash dev
+set -e
 
 # install composer
 wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# set environment variables
-cat >>/home/dev/.profile <<EOF
-export PHP_IDE_CONFIG="serverName=localhost"
-export XDEBUG_CONFIG="idekey=phpstorm"
-export LANG=de_DE.UTF-8
-export LANGUAGE=de_DE.UTF-8
-export LC_ALL=de_DE.UTF-8
-EOF
+# install phing
+pear channel-discover pear.phing.info
+pear install phing/phing
