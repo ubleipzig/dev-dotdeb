@@ -20,5 +20,7 @@ export LANGUAGE=de_DE.UTF-8
 export LC_ALL=de_DE.UTF-8
 EOF
 
+	test -S /ssh-agent && echo "export SSH_AUTH_SOCK=/ssh-agent" >>/home/${APP_USER}/.profile
+
 fi;
 
