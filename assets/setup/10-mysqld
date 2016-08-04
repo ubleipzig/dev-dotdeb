@@ -57,6 +57,20 @@ if [ "${DB_HOST}" == "localhost" ]; then
 	fi
 
 	echo "Setting up MySQL-Server for autostart ..."
-	sed -e 's/^\(\s*autostart\s*=\s*\).*$/\1true/' -i /etc/supervisor/conf.d/mysqld.conf
+
+
+	cat > /etc/supervisor/conf.d/mysqld.conf <<EOF
+[program:mysqld]
+priority = 20
+directory = /tmp
+command = /usr/bin/mysqld_safe
+user = mysql
+autostart = true
+autorestart = true
+stopasgroup = true
+stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+EOF
+
 fi;
 

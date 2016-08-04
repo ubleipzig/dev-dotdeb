@@ -6,7 +6,7 @@ This image goes to all the php developers that want a developmnent testing envir
 
 It is out of the box usable on linux hosts with a docker version >= 1.3
 
-The image prepares apache2, php and mysql and wraps around your local codebase. 
+The image prepares apache2, php and mysql and wraps around your local codebase.
 
 * baseimage: debian:latest (wheezy)
 * apache 2.4 with libapache_mod-fcgid
@@ -21,20 +21,20 @@ now you can use the docker to use this folder as vufind base and wrap the runtim
 
     docker run --name dev-dotdeb -d -v /path/to/my/project:/app -p 127.0.0.1:80:80 smoebody/dev-dotdeb
 
-this starts the container named _dev-dotdeb_ and sets up all the components with its default values. you should now be able 
+this starts the container named _dev-dotdeb_ and sets up all the components with its default values. you should now be able
 to reach the your project folder at
 
 http://127.0.0.1/
 
 ## How to debug
 
-By default php is configured up to start a debugging session indicated by request parameters. this comes in handy to use 
-with several browser-addons (e.g. [xdebug-helper for chrome][3]). Therefore the IDE should be configured to accept remotely 
+By default php is configured up to start a debugging session indicated by request parameters. this comes in handy to use
+with several browser-addons (e.g. [xdebug-helper for chrome][3]). Therefore the IDE should be configured to accept remotely
 started debugging sessions.
 
 ## How to to profile
 
-Also xdebug is able to profile script runs. The trace protocols can be used to determine potential performance issues. 
+Also xdebug is able to profile script runs. The trace protocols can be used to determine potential performance issues.
 A tool that analyses that protocols is [webgrind][1] which is integrated in the docker image and reachable here
 
 http://127.0.0.1/webgrind
@@ -55,12 +55,13 @@ mailcollects inbox. see [smoebody/mailcollect][5] for further details.
 ## run a interactive console in the container
 
     docker exec -ti dev-dotdeb /bin/bash
-    
+
+## Advanced configuration
+
+
 ## To do
 
 * outsource database utilisation
-* add [phing][4]
-* 
 
 
   [1]: https://code.google.com/p/webgrind/

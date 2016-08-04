@@ -27,17 +27,3 @@ cat > /etc/mysql/conf.d/mysql-skip-name-resolv.cnf <<EOF
 [mysqld]
 skip_name_resolve
 EOF
-
-cat > /etc/supervisor/conf.d/mysqld.conf <<EOF
-[program:mysqld]
-priority = 20
-directory = /tmp
-command = /usr/bin/mysqld_safe
-user = mysql
-autostart = false
-autorestart = true
-stopasgroup = true
-stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-EOF
-
