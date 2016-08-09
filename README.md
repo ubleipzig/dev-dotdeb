@@ -78,6 +78,8 @@ defines the shibboleth handler location
 defines the sp's entity id
 * `SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf`<br/>
 defines the discovery url. you can also define a distinct IDP by providing the variable `SHIB_IDP_ENTITY_ID` instead
+* `SHIB_STATUS_ACL`<br />
+defines the ip from where shibboleth status requests are allowed. normally this is your public ip
 
 for now only DFN-Test-IDP Metadata is supported.
 
