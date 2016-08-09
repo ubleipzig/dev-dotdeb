@@ -107,6 +107,8 @@ UseCanonicalName On
 </Location>
 EOF
 
+a2enconf shibboleth
+
 if [ "${SHIB_IDP_ENTITY_ID}" != "" ];then
 	SHIB_SSO_ATTRS="entityID=\"${SHIB_IDP_ENTITY_ID}\""
 elif [ "${SHIB_IDP_DISCOVERY_URL}" != "" ];then
