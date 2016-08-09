@@ -101,23 +101,11 @@ UseCanonicalName On
     RewriteRule .* - [L]
 </Location>
 
-Action shib-debug /cgi-bin/shib-debug virtual
-<Location /shib-debug>
-    RewriteEngine On
-RewriteRule .* /cgi-bin/shib-debug [T=application/x-httpd-cgi,L]
+<Location /shibboleth-secure>
+    ShibRequestSetting requireSession 1
+    require shib-session
 </Location>
 EOF
-
-a2enconf shibboleth
-
-cat >/var/www/cgi-bin/shib-debug <<EOF
-#!/bin/bash
-echo Content-type: text/plain
-echo ""
-echo "`env | grep -e 'REDIRECT\|Shib'`"
-EOF
-
-chmod a+x /var/www/cgi-bin/shib-debug
 
 if [ "${SHIB_IDP_ENTITY_ID}" != "" ];then
 	SHIB_SSO_ATTRS="entityID=\"${SHIB_IDP_ENTITY_ID}\""
@@ -150,13 +138,13 @@ cat >/etc/shibboleth/shibboleth2.xml <<EOF
 
     <ApplicationDefaults entityID="${SHIB_SP_ENTITY_ID}" REMOTE_USER="eppn persistent-id targeted-id">
 
-        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem" checkAddress="false" handlerSSL="true" cookieProps="https" handlerURL="${SHIB_HANDLER_URL}">
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem" checkAddress="false" handlerSSL="true" cookieProps="; path=/; secure; HttpOnly" handlerURL="${SHIB_HANDLER_URL}">
             <SSO ${SHIB_SSO_ATTRS}>
               SAML2 SAML1
             </SSO>
             <Logout>SAML2 Local</Logout>
             <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
-            <Handler type="Status" Location="/Status" acl="${DOCKERHOST} 127.0.0.1 ::1"/>
+            <Handler type="Status" Location="/Status" acl="${SHIB_STATUS_ACL} 127.0.0.1 ::1"/>
             <Handler type="Session" Location="/Session" showAttributeValues="true"/>
             <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
         </Sessions>
