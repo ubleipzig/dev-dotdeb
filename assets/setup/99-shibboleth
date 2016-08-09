@@ -95,6 +95,10 @@ chown _shibd:_shibd /etc/shibboleth/*.pem
 cat >/etc/apache2/conf-available/shibboleth.conf <<EOF
 ServerName ${SHIB_HOSTNAME}
 UseCanonicalName On
+<Location ${SHIB_HANDLER_URL}>
+    RewriteEngine On
+    RewriteRule .* - [L]
+</Location>
 EOF
 
 a2enconf shibboleth
