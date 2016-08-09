@@ -25,8 +25,8 @@ ENV APP_HOME=/app \
  WEBGRIND_ARCHIVE=1.1.0 \
  WEBGRIND_FORK=rovangju \
  SHIB_HOSTNAME=https://localhost:443 \
- SHIB_HANDLER_URL=/dev-dotdeb/Shibboleth.sso \
- SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb/ \
+ SHIB_HANDLER_URL=/Shibboleth.sso \
+ SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb \
  SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf
 
 COPY assets/build /docker/build
