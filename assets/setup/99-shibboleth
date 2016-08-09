@@ -95,13 +95,29 @@ chown _shibd:_shibd /etc/shibboleth/*.pem
 cat >/etc/apache2/conf-available/shibboleth.conf <<EOF
 ServerName ${SHIB_HOSTNAME}
 UseCanonicalName On
+
 <Location ${SHIB_HANDLER_URL}>
     RewriteEngine On
     RewriteRule .* - [L]
 </Location>
+
+Action shib-debug /cgi-bin/shib-debug virtual
+<Location /shib-debug>
+    RewriteEngine On
+RewriteRule .* /cgi-bin/shib-debug [T=application/x-httpd-cgi,L]
+</Location>
 EOF
 
 a2enconf shibboleth
+
+cat >/var/www/cgi-bin/shib-debug <<EOF
+#!/bin/bash
+echo Content-type: text/plain
+echo ""
+echo "`env | grep -e 'REDIRECT\|Shib'`"
+EOF
+
+chmod a+x /var/www/cgi-bin/shib-debug
 
 if [ "${SHIB_IDP_ENTITY_ID}" != "" ];then
 	SHIB_SSO_ATTRS="entityID=\"${SHIB_IDP_ENTITY_ID}\""
@@ -141,7 +157,7 @@ cat >/etc/shibboleth/shibboleth2.xml <<EOF
             <Logout>SAML2 Local</Logout>
             <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
             <Handler type="Status" Location="/Status" acl="${DOCKERHOST} 127.0.0.1 ::1"/>
-            <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+            <Handler type="Session" Location="/Session" showAttributeValues="true"/>
             <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
         </Sessions>
 
