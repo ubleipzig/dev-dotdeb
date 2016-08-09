@@ -58,6 +58,30 @@ mailcollects inbox. see [smoebody/mailcollect][5] for further details.
 
 ## Advanced configuration
 
+the following environment variables can be set when creating (run) a new container.
+the values given here are the default values.
+
+* `APP_HOME=/app`<br/>
+defines the application folder, normally where your application resides. there are some rare cases where strange software needs to
+be configured to reside in a special place
+* `APP_USER=dev`<br/>
+defines the user php is running with
+* `FCGID_MAX_REQUEST_LEN=16384000`<br/>
+defines the maximum request length that the webserver (apache2) is passing to the fcgi daemon (php)
+* `TIME_ZONE=Europe/Berlin`
+defines the timezone php is working in
+* `SHIB_HOSTNAME=https://services.ub.uni-leipzig.de:443`<br/>
+defines the hostname, port and scheme that is used to create the metadata for SP-registration (schema and port are taken from the request, not from this configuration!)
+* `SHIB_HANDLER_URL=/Shibboleth.sso`<br/>
+defines the shibboleth handler location
+* `SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb`<br/>
+defines the sp's entity id
+* `SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf`<br/>
+defines the discovery url. you can also define a distinct IDP by providing the variable `SHIB_IDP_ENTITY_ID` instead
+* `SHIB_STATUS_ACL`<br />
+defines the ip from where shibboleth status requests are allowed. normally this is your public ip
+
+for now only DFN-Test-IDP Metadata is supported.
 
 ## To do
 
