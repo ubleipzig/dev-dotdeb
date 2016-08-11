@@ -1,4 +1,4 @@
-# dev-dotdeb
+# docker-dev-dotdeb
 
 ## What is this image intended for?
 
@@ -8,12 +8,12 @@ It is out of the box usable on linux hosts with a docker version >= 1.3
 
 The image prepares apache2, php and mysql and wraps around your local codebase.
 
-* baseimage: debian:latest (wheezy)
-* apache 2.4 with libapache_mod-fcgid
-* php 5.4.36 from the famous dotdeb repository
-* mysql 5.6 from the famous dotdeb repository
-* [webgrind][1]
-* [composer][2]
+the following tools next to apache2, php 5.x (depending on the label) and mysql are at your service:
+
+* xdebug
+* webgrind
+* phpinfo
+
 
 ## How to use this image
 
@@ -38,6 +38,14 @@ Also xdebug is able to profile script runs. The trace protocols can be used to d
 A tool that analyses that protocols is [webgrind][1] which is integrated in the docker image and reachable here
 
 http://127.0.0.1/webgrind
+
+## PHPINFO
+
+look at the PHP-configuration at http://127.0.0.1/phpinfo
+
+## XCache (only in php54 and php55)
+
+look at the XCache statistics at http://127.0.0.1/xcache
 
 ## how to test mail send
 
