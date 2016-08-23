@@ -23,7 +23,8 @@ _setupRuntime
 case "$1" in
     run)
         echo "Starting supervisord..."
-        /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+        /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+        tail -f /var/log/supervisor/supervisord.log
         ;;
     *)
         if [ -x "/docker/scripts/$1" ];then
