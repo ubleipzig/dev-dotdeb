@@ -11,7 +11,7 @@ RUN apt-get update \
  && apt-get -y dist-upgrade \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2
 
-RUN echo "deb http://packages.dotdeb.org wheezy all" >/etc/apt/sources.list.d/dotdeb.list \
+RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker apache2-suexec libapache2-mod-fcgid \
@@ -27,7 +27,8 @@ ENV APP_HOME=/app \
  SHIB_HOSTNAME=https://localhost:443 \
  SHIB_HANDLER_URL=/Shibboleth.sso \
  SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb \
- SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf
+ SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf \
+ SQL_MODE=""
 
 COPY assets/build /docker/build
 RUN chmod 755 /docker/build/init \

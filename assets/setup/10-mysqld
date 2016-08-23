@@ -16,7 +16,6 @@ chown -R mysql:mysql /var/lib/mysql
 # fix permissions and ownership of /run/mysqld
 mkdir -p -m 0755 var/run/mysqld
 chown -R mysql:root var/run/mysqld
-
 # initialize MySQL data directory
 if [ "${DB_HOST}" == "localhost" ]; then
 	if [ ! -d /var/lib/mysql/mysql ]; then
@@ -56,20 +55,25 @@ if [ "${DB_HOST}" == "localhost" ]; then
 		/usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf shutdown
 	fi
 
-	echo "Setting up MySQL-Server for autostart ..."
+	if [ "${SQL_MODE}" != "" ];then
+		echo "Setting up custom sql_mode ..."
+		cat >/etc/mysql/conf.d/sqlmode.cnf <<EOF
+[mysqld]
+sql_mode = ${SQL_MODE}
+EOF
+	fi;
 
+	echo "Setting up MySQL-Server for autostart ..."
 
 	cat > /etc/supervisor/conf.d/mysqld.conf <<EOF
 [program:mysqld]
 priority = 20
 directory = /tmp
-command = /usr/bin/mysqld_safe
-user = mysql
+command = /usr/sbin/mysqld --console
 autostart = true
 autorestart = true
-stopasgroup = true
-stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
 EOF
 
 fi;
