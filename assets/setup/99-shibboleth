@@ -136,6 +136,7 @@ cat >/etc/shibboleth/shibboleth2.xml <<EOF
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    logger="console.logger"
     clockSkew="180">
 
     <ApplicationDefaults entityID="${SHIB_SP_ENTITY_ID}" REMOTE_USER="eppn persistent-id targeted-id">
@@ -167,6 +168,9 @@ cat >/etc/shibboleth/shibboleth2.xml <<EOF
 </SPConfig>
 EOF
 
+# activate debugging for shibboleth
+sed -e 's/\(log4j\.rootCategory=\)[^,]\+/\1DEBUG/' -i /etc/shibboleth/console.logger
+
 cat >/etc/supervisor/conf.d/shibd.conf <<EOF
 [program:shibd]
 priority = 20
@@ -175,7 +179,6 @@ command = shibd -f -c /etc/shibboleth/shibboleth2.xml -F
 user = _shibd
 autostart = true
 autorestart = true
-stopasgroup = true
-stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
 EOF

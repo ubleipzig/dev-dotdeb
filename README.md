@@ -88,6 +88,8 @@ defines the sp's entity id
 defines the discovery url. you can also define a distinct IDP by providing the variable `SHIB_IDP_ENTITY_ID` instead
 * `SHIB_STATUS_ACL`<br />
 defines the ip from where shibboleth status requests are allowed. normally this is your public ip
+* `SQL_MODE`<br />
+defines the sql_mode that mysqld is running with. I.e. `SQL_MODE="STRICT_TRANS_TABLES"`
 
 for now only DFN-Test-IDP Metadata is supported.
 

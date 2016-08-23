@@ -13,8 +13,8 @@ command = /usr/sbin/nullmailer-send
 user = mail
 autostart = true
 autorestart = true
-stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
 EOF
 
 fi;

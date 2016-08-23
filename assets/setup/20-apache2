@@ -50,20 +50,24 @@ Alias / ${APP_HOME}/
 </Directory>
 EOF
 
+sed -e 's!^\(\s*ErrorLog\s\+\).*$!\1 /dev/stderr!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
+sed -e 's!^\(\s*CustomLog\s\+\).*$!\1 /dev/stdout combined!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
+
+install -d -o ${APP_USER} -g ${APP_USER} /var/run/apache2/ /var/lock/apache2
+
 a2enmod ssl rewrite suexec fcgid shib2
 a2ensite 99-app default-ssl
+a2disconf other-vhosts-access-log
 
 # configure supervisord to start apache2
 cat >/etc/supervisor/conf.d/apache2.conf <<EOF
 [program:apache2]
 priority = 10
-environment = HOME="/var/www"
-command = /usr/sbin/apache2ctl -DFOREGROUND -k start
-redirect_stderr = true
+environment = HOME="/var/www",APACHE_LOCK_DIR="/var/lock/apache2",APACHE_PID_FILE="/var/run/apache2.pid",APACHE_RUN_USER="www-data",APACHE_RUN_GROUP="www-data",APACHE_RUN_DIR="/var/run/apache2"
+command = /usr/sbin/apache2 -DFOREGROUND
 user = root
 autostart = true
 autorestart = true
-stopasgroup = true
-stdout_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
-stderr_logfile = ${LOG_DIR}/supervisor/%(program_name)s.log
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
 EOF
