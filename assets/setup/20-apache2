@@ -56,7 +56,8 @@ install -d -o ${APP_USER} -g ${APP_USER} /var/run/apache2/ /var/lock/apache2
 
 a2enmod ssl rewrite suexec fcgid shib2
 a2ensite 99-app default-ssl
-a2disconf other-vhosts-access-log
+
+test -e /etc/apache2/conf.d/other-vhosts-access-log && rm /etc/apache2/conf.d/other-vhosts-access-log
 
 # configure supervisord to start apache2
 cat >/etc/supervisor/conf.d/apache2.conf <<EOF
