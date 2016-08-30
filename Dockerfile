@@ -28,7 +28,10 @@ ENV APP_HOME=/app \
  SHIB_HANDLER_URL=/Shibboleth.sso \
  SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb \
  SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf \
- SQL_MODE=""
+ SQL_MODE="" \
+ SMTP_HOST="" \
+ SMTP_NAME=dev-dotdeb \
+ SMTP_PORT=25
 
 COPY assets/build /docker/build
 RUN chmod 755 /docker/build/init \
