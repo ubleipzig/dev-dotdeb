@@ -19,7 +19,7 @@ the following tools next to apache2, php 5.x (depending on the label) and mysql 
 
 now you can use the docker to use this folder as vufind base and wrap the runtime environment around
 
-    docker run --name dev-dotdeb -d -v /path/to/my/project:/app -p 127.0.0.1:80:80 smoebody/dev-dotdeb
+    docker run --name dev-dotdeb -d -v /path/to/my/project:/app -p 127.0.0.1:80:80 useltmann/dev-dotdeb
 
 this starts the container named _dev-dotdeb_ and sets up all the components with its default values. you should now be able
 to reach the your project folder at
@@ -49,16 +49,15 @@ look at the XCache statistics at http://127.0.0.1/xcache
 
 ## how to test mail send
 
-This utilises the docker-image [smoebody/mailcollect][5] which acts as smtp-server and catches all sent emails in one inbox,
+This utilises the docker-image [useltmann/mailcollect][5] which acts as smtp-server and catches all sent emails in one inbox,
 regardless where its sent.
 
 to use it in conjunction with this docker-image you should start a container first. after its up and running you have
 to link this container to the dev-dotdeb container by adding the _--link_ option to the run-command above
 
-    docker run --name dev-dotdeb -d -v /path/to/my/project:/app -p 127.0.0.1:80:80 --link=mailcollect:smtp smoebody/dev-dotdeb
+    docker run --name dev-dotdeb -d -v /path/to/my/project:/app -p 127.0.0.1:80:80 --link=mailcollect:smtp -e SMTP_HOST=smtp docker.io/useltmann/dev-dotdeb
 
-The dev-dotdeb container is now connected to the mailcollect container and all mail that is sent by it ends in the
-mailcollects inbox. see [smoebody/mailcollect][5] for further details.
+The dev-dotdeb container is now connected to the mailcollect container and all mail that is sent by it ends in the mailcollects inbox. see [useltmann/mailcollect][5] for further details.
 
 ## run a interactive console in the container
 
@@ -82,7 +81,7 @@ defines the timezone php is working in
 defines the hostname, port and scheme that is used to create the metadata for SP-registration (schema and port are taken from the request, not from this configuration!)
 * `SHIB_HANDLER_URL=/Shibboleth.sso`<br/>
 defines the shibboleth handler location
-* `SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb`<br/>
+* `SHIB_SP_ENTITY_ID=https://hub.docker.com/r/useltmann/dev-dotdeb`<br/>
 defines the sp's entity id
 * `SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf`<br/>
 defines the discovery url. you can also define a distinct IDP by providing the variable `SHIB_IDP_ENTITY_ID` instead
@@ -90,6 +89,12 @@ defines the discovery url. you can also define a distinct IDP by providing the v
 defines the ip from where shibboleth status requests are allowed. normally this is your public ip
 * `SQL_MODE`<br />
 defines the sql_mode that mysqld is running with. I.e. `SQL_MODE="STRICT_TRANS_TABLES"`
+* `SMTP_HOST`<br />
+defines the smtp host that takes mails sent by php. if none is provided the php default values take place
+* `SMTP_NAME=dev-dotdeb`<br />
+defines the host name as which the container sents his emails
+* `SMTP_PORT=25`<br />
+defines the port on which the container trys to connect to the smtp host
 
 for now only DFN-Test-IDP Metadata is supported.
 
@@ -102,4 +107,4 @@ for now only DFN-Test-IDP Metadata is supported.
   [2]: https://getcomposer.org/
   [3]: https://github.com/mac-cain13/xdebug-helper-for-chrome
   [4]: http://www.phing.info/
-  [5]: https://registry.hub.docker.com/u/smoebody/mailcollect/
+  [5]: https://registry.hub.docker.com/u/useltmann/mailcollect/
