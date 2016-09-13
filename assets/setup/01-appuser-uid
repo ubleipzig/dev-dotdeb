@@ -3,8 +3,8 @@
 set -e
 
 # adapt appusers  uid
-APP_UID=`ls -lnd ${APP_HOME} | awk -F" " '{ print $3 }'`
-APP_GID=`ls -lnd ${APP_HOME} | awk -F" " '{ print $4 }'`
+APP_UID=`stat -c %u ${APP_HOME}`
+APP_GID=`stat -c %g ${APP_HOME}`
 
 # we do not allow root to be the app user
 if [ "$APP_UID" == "0" -o "$APP_GID" == "0" ]; then

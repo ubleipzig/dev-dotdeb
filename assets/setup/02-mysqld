@@ -13,9 +13,9 @@ DB_PASS=${DB_PASS:-}
 mkdir -p -m 700 /var/lib/mysql
 chown -R mysql:mysql /var/lib/mysql
 
-# fix permissions and ownership of /run/mysqld
-mkdir -p -m 0755 var/run/mysqld
-chown -R mysql:root var/run/mysqld
+# fix permissions and ownership of /var/run/mysqld
+mkdir -p -m 0755 /var/run/mysqld
+chown -R mysql:root /var/run/mysqld
 # initialize MySQL data directory
 if [ "${DB_HOST}" == "localhost" ]; then
 	if [ ! -d /var/lib/mysql/mysql ]; then

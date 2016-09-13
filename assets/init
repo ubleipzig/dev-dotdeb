@@ -17,20 +17,28 @@ _setupRuntime() {
     done
 }
 
-echo "Setting up runtime environment..."
-_setupRuntime
 
 case "$1" in
     run)
+        echo "Setting up runtime environment..."
+        _setupRuntime
         echo "Starting supervisord..."
         /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
         tail -f /var/log/supervisor/supervisord.log
         ;;
+    bash)
+        echo "Starting up bash..."
+        cd ${APP_HOME}
+        /bin/bash
+        ;;
     *)
+        echo "Setting up runtime environment..."
+        _setupRuntime
         if [ -x "/docker/scripts/$1" ];then
             exec su -l ${APP_USER} -c "cd ${APP_HOME};/docker/scripts/$@"
         else
-            exec su -l ${APP_USER} -c "cd ${APP_HOME};$@"
+            cd ${APP_HOME}
+            su ${APP_USER} -c $@
         fi;
         ;;
 esac

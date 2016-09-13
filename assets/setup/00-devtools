@@ -1,0 +1,27 @@
+#!/bin/bash
+
+export PHP_IDE_CONFIG="serverName=localhost"
+export XDEBUG_CONFIG="idekey=phpstorm"
+export LANG=de_DE.UTF-8
+export LANGUAGE=de_DE.UTF-8
+export LC_ALL=de_DE.UTF-8
+
+if [ -S "/ssh-agent" ]; then
+	export SSH_AUTH_SOCK=/ssh-agent
+fi
+
+if ! id ${APP_USER} &>/dev/null; then
+
+	# create user
+	useradd --create-home --home-dir /home/${APP_USER} --shell /bin/bash ${APP_USER}
+
+	# create .my.cnf
+	cat >/home/${APP_USER}/.my.cnf <<EOF
+[client]
+user=root
+EOF
+
+	# make .ssh folder in app users home directory
+	install -o "${APP_USER}" -d "/home/${APP_USER}/.ssh"
+fi;
+

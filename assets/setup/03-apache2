@@ -53,7 +53,8 @@ EOF
 sed -e 's!^\(\s*ErrorLog\s\+\).*$!\1 /dev/stderr!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
 sed -e 's!^\(\s*CustomLog\s\+\).*$!\1 /dev/stdout combined!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
 
-install -d -o ${APP_USER} -g ${APP_USER} /var/run/apache2/ /var/lock/apache2
+
+install -o www-data -d /var/run/lock/apache2
 
 a2enmod ssl rewrite suexec fcgid shib2
 a2ensite 99-app default-ssl

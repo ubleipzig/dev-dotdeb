@@ -1,0 +1,6 @@
+#!/bin/bash
+# workaround for strangely mounted tmpfs /run sometimes
+
+for dir in "/run/apache2" "/run/lock"; do
+	test -e "${dir}" || mkdir ${dir}
+done
