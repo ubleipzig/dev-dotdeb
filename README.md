@@ -1,5 +1,7 @@
 # docker-dev-dotdeb
 
+[![](https://images.microbadger.com/badges/version/useltmann/dev-dotdeb.svg)](http://microbadger.com/images/useltmann/dev-dotdeb "Get your own version badge on microbadger.com")
+
 ## What is this image intended for?
 
 This image goes to all the php developers that want a developmnent testing environment set up in no time.
