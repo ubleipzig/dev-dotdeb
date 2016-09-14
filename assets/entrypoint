@@ -1,0 +1,42 @@
+#!/bin/bash
+
+DOCKERHOST=$(ip route show | grep -e ^default | awk -F" " '{ print $3 }')
+
+##
+## setup defaults
+##
+SETUP_DIR="/docker/setup"
+
+LOG_DIR="/var/log"
+
+_setupRuntime() {
+    # set up what has to be set up
+    for i in `ls -A ${SETUP_DIR}`; do
+        echo "Setting up $i..."
+        source "${SETUP_DIR}/$i"
+    done
+}
+
+
+case "$1" in
+    run)
+        echo "Setting up runtime environment..."
+        _setupRuntime
+        echo "Starting supervisord..."
+        /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+        tail -f /var/log/supervisor/supervisord.log
+        ;;
+    *)
+        echo "Setting up runtime environment..."
+        _setupRuntime
+        if [ -x "/docker/scripts/$1" ];then
+            cd ${APP_HOME}
+            exec su ${APP_USER} -c "/docker/scripts/$@"
+        else
+            cd ${APP_HOME}
+            su ${APP_USER} -c "$*"
+        fi;
+        ;;
+esac
+
+exit 0

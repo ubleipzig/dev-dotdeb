@@ -54,8 +54,6 @@ sed -e 's!^\(\s*ErrorLog\s\+\).*$!\1 /dev/stderr!' -i /etc/apache2/apache2.conf 
 sed -e 's!^\(\s*CustomLog\s\+\).*$!\1 /dev/stdout combined!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
 
 
-install -o www-data -d /var/run/lock/apache2
-
 a2enmod ssl rewrite suexec fcgid shib2
 a2ensite 99-app default-ssl
 a2disconf other-vhosts-access-log

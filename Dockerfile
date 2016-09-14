@@ -3,7 +3,7 @@ FROM debian:jessie
 MAINTAINER ulf.seltmann@metaccount.de
 EXPOSE 80 443 3306
 VOLUME ["/var/lib/mysql", "/var/run/mysqld", "/app", "/var/lib/xdebug"]
-ENTRYPOINT ["/docker/init"]
+ENTRYPOINT ["/docker/entrypoint"]
 CMD ["run"]
 
 # adding dot-deb repository
@@ -33,10 +33,12 @@ ENV APP_HOME=/app \
  SMTP_NAME=dev-dotdeb \
  SMTP_PORT=25
 
+COPY assets/init /docker/init
 COPY assets/build /docker/build
-RUN chmod 755 /docker/build/init \
- && /docker/build/init
+RUN chmod 755 /docker/init \
+ && /docker/init \
+ && rm -rf /docker/build
 
 COPY assets/setup /docker/setup
-COPY assets/init /docker/init
-RUN chmod 755 /docker/init
+COPY assets/entrypoint /docker/entrypoint
+RUN chmod 755 /docker/entrypoint
