@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# create missing directories
+install -o root -g root -d /var/run/apache2
+install -o www-data -g root -d /var/lock/apache2
