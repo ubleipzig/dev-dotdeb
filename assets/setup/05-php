@@ -12,6 +12,7 @@ php5enmod date
 
 sed -e "s/^\(max_execution_time\)\s*=.*\$/\1 = 240/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(memory_limit\)\s*=.*\$/\1 = 512M/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(error_reporting\)\s*=.*\$/\1 = E_ALL/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(display_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(display_startup_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
 sed -e "s/^\(post_max_size\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
