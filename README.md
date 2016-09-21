@@ -84,7 +84,7 @@ defines the hostname, port and scheme that is used to create the metadata for SP
 * `SHIB_HANDLER_URL=/Shibboleth.sso`<br/>
 defines the shibboleth handler location
 * `SHIB_SP_ENTITY_ID=https://hub.docker.com/r/useltmann/dev-dotdeb`<br/>
-defines the sp's entity id
+defines the sp's entity id. **be aware that you have to specify a different entityId in order to enable shibboleth support. if you leave the default entityId, shibboleth will not start**
 * `SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf`<br/>
 defines the discovery url. you can also define a distinct IDP by providing the variable `SHIB_IDP_ENTITY_ID` instead
 * `SHIB_STATUS_ACL`<br />
