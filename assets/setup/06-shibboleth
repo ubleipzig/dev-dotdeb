@@ -100,6 +100,12 @@ EOF
     RewriteRule .* - [L]
 </Location>
 
+Alias /shibboleth-metadata /etc/shibboleth/metadata.xml
+
+<Location /shibboleth-metadata>
+  Require all granted
+</Location>
+
 <Location /shibboleth-secure>
     ShibRequestSetting requireSession 1
     require shib-session
@@ -128,6 +134,17 @@ environment variable in order to correctly set up shibboleth. exiting ...";
   METADATA_PROVIDER_LOCAL='
         <MetadataProvider type="XML" file="partner-metadata.xml"/>
 '
+
+if [ "${SHIB_ATTRIBUTE_MAP}" != "" ]; then
+  IFS=',' read -ra attrlist <<< "${SHIB_ATTRIBUTE_MAP}";
+  for attr in "${attrlist[@]}" ;do
+    ATTRIBUTE_XML="${ATTRIBUTE_XML}
+  <Attribute name=\"${attr%%=*}\" id=\"${attr#*=}\" />\n"
+  done
+  sed -e 's!</Attributes>!!' -i /etc/shibboleth/attribute-map.xml
+  echo -e "${ATTRIBUTE_XML}\n</Attributes>" >>/etc/shibboleth/attribute-map.xml
+fi
+
 
   cat >/etc/shibboleth/shibboleth2.xml <<EOF
 <SPConfig xmlns="urn:mace:shibboleth:2.0:native:sp:config"

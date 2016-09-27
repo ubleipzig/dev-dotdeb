@@ -28,6 +28,7 @@ ENV APP_HOME=/app \
  SHIB_HANDLER_URL=/Shibboleth.sso \
  SHIB_SP_ENTITY_ID=https://hub.docker.com/r/smoebody/dev-dotdeb \
  SHIB_IDP_DISCOVERY_URL=https://wayf.aai.dfn.de/DFN-AAI-Test/wayf \
+ SHIB_ATTRIBUTE_MAP="" \
  SQL_MODE="" \
  SMTP_HOST="" \
  SMTP_NAME=dev-dotdeb \
