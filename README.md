@@ -79,7 +79,7 @@ defines the user php is running with
 defines the maximum request length that the webserver (apache2) is passing to the fcgi daemon (php)
 * `TIME_ZONE=Europe/Berlin`
 defines the timezone php is working in
-* `SHIB_HOSTNAME=https://services.ub.uni-leipzig.de:443`<br/>
+* `SHIB_HOSTNAME=https://localhost`<br/>
 defines the hostname, port and scheme that is used to create the metadata for SP-registration (schema and port are taken from the request, not from this configuration!)
 * `SHIB_HANDLER_URL=/Shibboleth.sso`<br/>
 defines the shibboleth handler location
@@ -89,6 +89,8 @@ defines the sp's entity id. **be aware that you have to specify a different enti
 defines the discovery url. you can also define a distinct IDP by providing the variable `SHIB_IDP_ENTITY_ID` instead
 * `SHIB_STATUS_ACL`<br />
 defines the ip from where shibboleth status requests are allowed. normally this is your public ip
+* `SHIB_ATTRIBUTE_MAP`<br />
+defines simple attribute mappings in style `name=id` and seperate multiple definitions with comma, i.e. if you want to define a new Attribute with name "urn:oid:1.3.6.1.4.1.5923.1.1.1.9" and id "affiliation" you should do as follows' `SHIB_ATTRIBUTE_MAP="urn:oid:1.3.6.1.4.1.5923.1.1.1.9=affiliation"
 * `SQL_MODE`<br />
 defines the sql_mode that mysqld is running with. I.e. `SQL_MODE="STRICT_TRANS_TABLES"`
 * `SMTP_HOST`<br />
