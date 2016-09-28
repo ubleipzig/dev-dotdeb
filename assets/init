@@ -1,59 +1,15 @@
 #!/bin/bash
+set -e
 
-DOCKERHOST=$(ip route show | grep -e ^default | awk -F" " '{ print $3 }')
-
-##
-## setup defaults
-##
-SETUP_DIR="/docker/setup"
-
+BUILD_DIR="/docker/build"
 LOG_DIR="/var/log"
 
-_adaptUid() {
-    # adapt dev uid
-    APP_UID=`ls -lnd ${APP_HOME} | awk -F" " '{ print $3 }'`
-    APP_GID=`ls -lnd ${APP_HOME} | awk -F" " '{ print $4 }'`
+for i in `ls -A ${BUILD_DIR}`; do
+    echo "Building $i..."
 
-    # we do not allow root to be the app user
-    if [ "$APP_UID" == "0" -o "$APP_GID" == "0" ]; then
-        echo "Setting app user to UID:1000 and GID:1000 ..."
-        APP_UID="1000";
-        APP_GID="1000";
-    fi;
+    source "${BUILD_DIR}/$i"
+done
 
-    sed -e "s!^\(dev:x\):[0-9]\+:[0-9]\+:\(.*\)\$!\1:${APP_UID}:${APP_GID}:\2!" -i /etc/passwd
-    sed -e "s!^\(dev:x\):[0-9]\+:\(.*\)\$!\1:${APP_GID}:\2!" -i /etc/group
-
-    chown dev:dev /home/dev -R
-}
-
-_setupRuntime() {
-    # set up what has to be set up
-    for i in `ls -A ${SETUP_DIR}`; do
-        echo "Setting up $i..."
-        source "${SETUP_DIR}/$i"
-    done
-}
-
-echo "Setting up owner/group of dev..."
-_adaptUid
-
-echo "Setting up runtime environment..."
-_setupRuntime
-
-case "$1" in
-    run)
-        echo "Starting supervisord..."
-        /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
-        ;;
-    *)
-        if [ ! -x "/docker/scripts/$1" ];then
-            echo "unrecognized command: $1";
-            exit 1;
-        fi;
-
-        exec /docker/scripts/$1 $*
-        ;;
-esac
-
-exit 0
+# cleanup
+rm -rf /var/lib/apt/lists/*
+rm -rf /var/cache/apt/archives/*

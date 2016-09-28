@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+# add some memory to xcaches var cache
+cat >>/etc/php5/mods-available/xcache.ini <<EOF
+[xcache]
+xcache.admin.enable_auth = "Off"
+xcache.size = "32M"
+xcache.var_size = "32M"
+EOF
+
+php5enmod xcache
+
+cp -a /usr/share/xcache/htdocs /var/www/xcache
+
+cat >/etc/apache2/sites-available/00-xcache.conf <<EOF
+Alias /xcache /var/www/xcache
+
+<Directory /var/www/xcache>
+    FCGIWrapper /var/www/fcgid/php-fcgi .php
+    Options +ExecCGI
+</Directory>
+EOF
+
+a2ensite 00-xcache

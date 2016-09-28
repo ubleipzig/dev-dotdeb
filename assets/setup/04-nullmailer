@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# set mail host
+if [ "${SMTP_HOST}" != "" ]; then
+    echo ${SMTP_NAME} > /etc/mailname
+    echo "${SMTP_HOST} smtp --port ${SMTP_PORT}" >/etc/nullmailer/remotes
+
+    cat > /etc/supervisor/conf.d/nullmailer.conf <<EOF
+[program:nullmailer]
+priority = 20
+directory = /tmp
+command = /usr/sbin/nullmailer-send
+user = mail
+autostart = true
+autorestart = true
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
+EOF
+
+fi;

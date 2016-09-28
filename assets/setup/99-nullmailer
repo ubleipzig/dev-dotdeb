@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# set mail host
-if [ "${SMTP_PORT_25_TCP_ADDR}" != "" ]; then
-    echo ${SMTP_NAME} | awk -F/ '{ print $2 }' > /etc/mailname
-    echo "${SMTP_PORT_25_TCP_ADDR} smtp --port ${SMTP_PORT_25_TCP_PORT}" >/etc/nullmailer/remotes
-	sed -e 's/^\(\s*autostart\s*=\s*\).*$/\1true/' -i /etc/supervisor/conf.d/nullmailer.conf
-fi;

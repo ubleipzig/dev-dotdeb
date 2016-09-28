@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+set -e
+
+# localisation is UTC+1
+cat >/etc/php5/mods-available/date.ini <<EOF
+[Date]
+date.timezone = ${TIME_ZONE}
+EOF
+
+php5enmod date
+
+sed -e "s/^\(max_execution_time\)\s*=.*\$/\1 = 240/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(memory_limit\)\s*=.*\$/\1 = 512M/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(error_reporting\)\s*=.*\$/\1 = E_ALL/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(display_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(display_startup_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(post_max_size\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(upload_max_filesize\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
+sed -e "s/^;\?\s*\(always_populate_raw_post_data\)\s*=.*\$/\1 = -1/" -i /etc/php5/cgi/php.ini
+sed -e "s/^;\?\s*\(max_input_vars\)\s*=.*\$/\1 = 1500/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(xdebug\.remote_host\).*\$/\1 = ${DOCKERHOST}/" -i /etc/php5/mods-available/xdebug.ini
+
+chown ${APP_USER}:${APP_USER} /var/www/fcgid /var/lib/xdebug -R

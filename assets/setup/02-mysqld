@@ -10,13 +10,12 @@ DB_ROOT=${DB_ROOT:-root}
 DB_PASS=${DB_PASS:-}
 
 # fix permissions and ownership of /var/lib/mysql
-mkdir -p -m 700 /var/lib/mysql
+test -d /var/lib/mysqld || mkdir -p -m 700 /var/lib/mysql
 chown -R mysql:mysql /var/lib/mysql
 
-# fix permissions and ownership of /run/mysqld
-mkdir -p -m 0755 var/run/mysqld
-chown -R mysql:root var/run/mysqld
-
+# fix permissions and ownership of /var/run/mysqld
+test -d /var/run/mysqld || mkdir -p -m 0755 /var/run/mysqld
+chown -R mysql:root /var/run/mysqld
 # initialize MySQL data directory
 if [ "${DB_HOST}" == "localhost" ]; then
 	if [ ! -d /var/lib/mysql/mysql ]; then
@@ -47,12 +46,35 @@ if [ "${DB_HOST}" == "localhost" ]; then
 		echo "Creating debian-sys-maint user..."
 		mysql -uroot -e "GRANT ALL PRIVILEGES on *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION;"
 
+        echo "Granting root permission from Docker Host ..."
+        mysql -uroot -e "GRANT all PRIVILEGES on *.* to root@${DOCKERHOST} WITH GRANT OPTION;"
+
 		echo "Setting root user password"
 		/usr/bin/mysqladmin -u root password "${DB_PASS}"
 
 		/usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf shutdown
 	fi
 
+	if [ "${SQL_MODE}" != "" ];then
+		echo "Setting up custom sql_mode ..."
+		cat >/etc/mysql/conf.d/sqlmode.cnf <<EOF
+[mysqld]
+sql_mode = ${SQL_MODE}
+EOF
+	fi;
+
 	echo "Setting up MySQL-Server for autostart ..."
-	sed -e 's/^\(\s*autostart\s*=\s*\).*$/\1true/' -i /etc/supervisor/conf.d/mysqld.conf
+
+	cat > /etc/supervisor/conf.d/mysqld.conf <<EOF
+[program:mysqld]
+priority = 20
+directory = /tmp
+command = /usr/sbin/mysqld --console
+autostart = true
+autorestart = true
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
+EOF
+
 fi;
+
