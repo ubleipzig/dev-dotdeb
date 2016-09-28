@@ -103,7 +103,8 @@ EOF
 Alias /shibboleth-metadata /etc/shibboleth/metadata.xml
 
 <Location /shibboleth-metadata>
-  Require all granted
+		Order allow,deny
+		Allow from all
 </Location>
 
 <Location /shibboleth-secure>
@@ -183,35 +184,11 @@ fi
 EOF
 
   cat >/etc/shibboleth/metadata.xml <<EOF
-<!--
-This is example metadata only. Do *NOT* supply it as is without review,
-and do *NOT* provide it in real time to your partners.
- -->
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="_f46fa7b46e8469845f8cb9c328321bbeba0308d2" entityID="${SHIB_SP_ENTITY_ID}">
-
-  <md:Extensions xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport">
-    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/>
-    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#sha384"/>
-    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#sha224"/>
-    <alg:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha224"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2009/xmldsig11#dsa-sha256"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-    <alg:SigningMethod Algorithm="http://www.w3.org/2000/09/xmldsig#dsa-sha1"/>
-  </md:Extensions>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="_357ab7a4f7e30bf2126d667c3ac04fd85260014a" entityID="${SHIB_SP_ENTITY_ID}">
 
   <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:1.0:protocol">
     <md:Extensions>
       <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/Login"/>
-      <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/Login" index="1"/>
     </md:Extensions>
     <md:KeyDescriptor>
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -237,27 +214,18 @@ bcpYpzl5TERBGs27fizTDKUq3hszXzgq3iuo8vdXiFGBdJ0oZXvuTTlSJF0CPQ7K
 </ds:X509Certificate>
         </ds:X509Data>
       </ds:KeyInfo>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes128-gcm"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes192-gcm"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes256-gcm"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes192-cbc"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
-      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
     </md:KeyDescriptor>
-    <md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/Artifact/SOAP" index="1"/>
+    <md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/Artifact/SOAP" index="0"/>
     <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SLO/SOAP"/>
     <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SLO/Redirect"/>
     <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SLO/POST"/>
     <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SLO/Artifact"/>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/POST" index="1"/>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/POST-SimpleSign" index="2"/>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/Artifact" index="3"/>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/ECP" index="4"/>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML/POST" index="5"/>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML/Artifact" index="6"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/POST" index="0"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/POST-SimpleSign" index="1"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/Artifact" index="2"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML2/ECP" index="3"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML/POST" index="4"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" Location="${SHIB_HOSTNAME}${SHIB_HANDLER_URL}/SAML/Artifact" index="5"/>
   </md:SPSSODescriptor>
 
 </md:EntityDescriptor>
