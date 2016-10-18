@@ -10,15 +10,33 @@ EOF
 
 php5enmod date
 
-sed -e "s/^\(max_execution_time\)\s*=.*\$/\1 = 240/" -i /etc/php5/cgi/php.ini
-sed -e "s/^\(memory_limit\)\s*=.*\$/\1 = 512M/" -i /etc/php5/cgi/php.ini
-sed -e "s/^\(error_reporting\)\s*=.*\$/\1 = E_ALL/" -i /etc/php5/cgi/php.ini
-sed -e "s/^\(display_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
-sed -e "s/^\(display_startup_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/cgi/php.ini
-sed -e "s/^\(post_max_size\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
-sed -e "s/^\(upload_max_filesize\)\s*=.*\$/\1 = 2G/" -i /etc/php5/cgi/php.ini
-sed -e "s/^;\?\s*\(always_populate_raw_post_data\)\s*=.*\$/\1 = -1/" -i /etc/php5/cgi/php.ini
-sed -e "s/^;\?\s*\(max_input_vars\)\s*=.*\$/\1 = 1500/" -i /etc/php5/cgi/php.ini
+sed -e "s/^\(max_execution_time\)\s*=.*\$/\1 = 240/" -i /etc/php5/fpm/php.ini
+sed -e "s/^\(memory_limit\)\s*=.*\$/\1 = 512M/" -i /etc/php5/fpm/php.ini
+sed -e "s/^\(error_reporting\)\s*=.*\$/\1 = E_ALL/" -i /etc/php5/fpm/php.ini
+sed -e "s/^\(display_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/fpm/php.ini
+sed -e "s/^\(display_startup_errors\)\s*=.*\$/\1 = On/" -i /etc/php5/fpm/php.ini
+sed -e "s/^\(post_max_size\)\s*=.*\$/\1 = 2G/" -i /etc/php5/fpm/php.ini
+sed -e "s/^\(upload_max_filesize\)\s*=.*\$/\1 = 2G/" -i /etc/php5/fpm/php.ini
+sed -e "s/^;\?\s*\(always_populate_raw_post_data\)\s*=.*\$/\1 = -1/" -i /etc/php5/fpm/php.ini
+sed -e "s/^;\?\s*\(max_input_vars\)\s*=.*\$/\1 = 1500/" -i /etc/php5/fpm/php.ini
 sed -e "s/^\(xdebug\.remote_host\).*\$/\1 = ${DOCKERHOST}/" -i /etc/php5/mods-available/xdebug.ini
 
-chown ${APP_USER}:${APP_USER} /var/www/fcgid /var/lib/xdebug -R
+sed -e "s/^\(user\)\s*=.*\$/\1 = ${APP_USER}/" -i /etc/php5/fpm/pool.d/www.conf
+sed -e "s/^\(group\)\s*=.*\$/\1 = ${APP_USER}/" -i /etc/php5/fpm/pool.d/www.conf
+sed -e "s/^\(listen\)\s*=.*\$/\1 = 127.0.0.1:9000 /" -i /etc/php5/fpm/pool.d/www.conf
+
+chown ${APP_USER}:${APP_USER} /var/lib/xdebug -R
+
+cat >/etc/supervisor/conf.d/php-fpm.conf <<EOF
+[program:php-fpm]
+priority = 10
+environment = HOME="/var/www"
+command = /usr/sbin/php5-fpm --nodaemonize --fpm-config /etc/php5/fpm/php-fpm.conf
+redirect_stderr = true
+user = root
+autostart = true
+autorestart = true
+stopasgroup = true
+redirect_stderr = true
+stdout_logfile = ${LOG_DIR}/supervisor/supervisord.log
+EOF
