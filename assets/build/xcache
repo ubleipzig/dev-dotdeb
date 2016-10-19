@@ -16,11 +16,6 @@ cp -a /usr/share/xcache/htdocs /var/www/xcache
 
 cat >/etc/apache2/sites-available/00-xcache.conf <<EOF
 Alias /xcache /var/www/xcache
-
-<Directory /var/www/xcache>
-    FCGIWrapper /var/www/fcgid/php-fcgi .php
-    Options +ExecCGI
-</Directory>
 EOF
 
 a2ensite 00-xcache

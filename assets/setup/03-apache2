@@ -3,13 +3,12 @@
 set -e
 
 cat >/etc/apache2/sites-available/99-app.conf <<EOF
-Alias / ${APP_HOME}
+Alias / ${APP_HOME}/
 <Directory ${APP_HOME}>
-	DirectoryIndex /index.php index.php
-	Options +ExecCGI
-	AllowOverride All
 	Require all granted
-	ProxyPassMatch ^/(.*\.php(/.*)?)\$ fcgi://127.0.0.1:9000${APP_HOME}/\$1
+	Options Indexes FollowSymLinks
+	IndexOptions FancyIndexing
+	AllowOverride All
 </Directory>
 EOF
 

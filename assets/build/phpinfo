@@ -12,11 +12,6 @@ EOF
 
 cat >/etc/apache2/sites-available/00-phpinfo.conf <<EOF
 Alias /phpinfo /var/www/phpinfo
-
-<Directory /var/www/phpinfo>
-    FCGIWrapper /var/www/fcgid/php-fcgi .php
-    Options +ExecCGI
-</Directory>
 EOF
 
 a2ensite 00-phpinfo
