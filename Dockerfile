@@ -7,10 +7,10 @@ ENTRYPOINT ["/docker/entrypoint"]
 CMD ["run"]
 
 RUN echo 'Acquire::HTTP::Proxy "http://172.17.0.1:3142";' >> /etc/apt/apt.conf.d/01proxy \
- && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/01proxy \
- && apt-get update \
+ && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/01proxy
+RUN apt-get update \
  && apt-get -y dist-upgrade \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 git \
  && echo "deb http://packages.dotdeb.org jessie all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
  && apt-get update \
