@@ -12,7 +12,7 @@ RUN apt-get update \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker \
-        php5-fpm php5-cli php-pear php5-curl php5-gd php5-intl php5-ldap php5-readline php5-mcrypt php5-mysqlnd php5-sqlite php5-xcache php5-xdebug php5-xsl php5-xhprof php5-dev \
+        php7.0-fpm php7.0-cli php-pear php7.0-curl php7.0-gd php7.0-intl php7.0-ldap php7.0-readline php7.0-mcrypt php7.0-mysqlnd php7.0-sqlite php7.0-xdebug php7.0-xsl php7.0-dev \
         make mysql-client mysql-server unzip \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /var/cache/apt/archives/*

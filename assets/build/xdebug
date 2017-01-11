@@ -2,7 +2,7 @@
 
 set -e
 
-cat >>/etc/php5/mods-available/xdebug.ini <<EOF
+cat >>/etc/php/7.0/mods-available/xdebug.ini <<EOF
 [debugger]
 xdebug.remote_host =
 xdebug.remote_enable = On
@@ -15,4 +15,4 @@ xdebug.profiler_output_dir = /var/lib/xdebug
 xdebug.profiler_output_name = cachegrind.out.%s
 EOF
 
-php5enmod xdebug
+phpenmod xdebug
