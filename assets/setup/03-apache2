@@ -12,8 +12,9 @@ Alias / ${APP_HOME}/
 </Directory>
 EOF
 
-sed -e 's!^\(\s*ErrorLog\s\+\).*$!\1 /dev/stderr!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
-sed -e 's!^\(\s*CustomLog\s\+\).*$!\1 /dev/stdout combined!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
+sed -e 's!^\(\s*ErrorLog\)\s\+.*$!\1 /dev/stderr!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
+sed -e 's!^\(\s*CustomLog\)\s\+.*$!\1 /dev/stdout combined!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
+sed -e 's!^\(\s*Timeout\)\s\+.*$!\1 3600!' -i /etc/apache2/apache2.conf /etc/apache2/sites-available/*
 
 a2enmod ssl rewrite proxy_fcgi shib2
 a2ensite 99-app default-ssl
