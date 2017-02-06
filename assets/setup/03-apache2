@@ -20,6 +20,8 @@ a2enmod ssl rewrite proxy_fcgi shib2
 a2ensite 99-app default-ssl
 a2disconf other-vhosts-access-log
 
+test -e /var/run/apache2.pid && rm /var/run/apache2.pid
+
 # configure supervisord to start apache2
 cat >/etc/supervisor/conf.d/apache2.conf <<EOF
 [program:apache2]
