@@ -1,6 +1,6 @@
 ### install debian ###
-FROM debian:jessie
-MAINTAINER ulf.seltmann@metaccount.de
+FROM debian:stretch
+LABEL authors="Ulf Seltmann <ulf.seltmann@metaccount.de>, Frank Morgner <morgnerf@ub.uni-leipzig.de>"
 EXPOSE 80 443 3306
 VOLUME ["/var/lib/mysql", "/var/run/mysqld", "/app", "/var/lib/xdebug"]
 ENTRYPOINT ["/docker/entrypoint"]
@@ -8,11 +8,11 @@ CMD ["run"]
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 git \
- && echo "deb http://packages.dotdeb.org jessie all" >/etc/apt/sources.list.d/dotdeb.list \
+ && echo "deb http://packages.dotdeb.org stretch all" >/etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker \
-        php7.0-fpm php7.0-cli php-pear php7.0-curl php7.0-gd php7.0-intl php7.0-ldap php7.0-readline php7.0-mcrypt php7.0-mysqlnd php7.0-sqlite php7.0-xdebug php7.0-xsl php7.0-mbstring php7.0-dev \
+        php7.2-fpm php7.2-cli php-pear php7.2-curl php7.2-gd php7.2-intl php7.2-ldap php7.2-readline php7.2-mcrypt php7.2-mysqlnd php7.2-sqlite php7.2-xdebug php7.2-xsl php7.2-mbstring php7.2-dev \
         make mysql-client mysql-server unzip \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /var/cache/apt/archives/*
