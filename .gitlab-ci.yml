@@ -1,55 +1,44 @@
 stages:
-  - build
-  - publish
+  - image
+  - mirror
 
-variables:
-  production_repo: services.ub.uni-leipzig.de:11443/bdd_dev/dev-dotdeb
-
-docker_build:
-  stage: build
-  image: ubleipzig/deployer:1.2.4
+dev-dotdeb_image:
+  stage: image
+  image: docker:latest
   services:
     - docker:18.09-dind
   script: |
-    deployer build \
-      --build-arg HTTP_PROXY="${HTTP_PROXY}" \
-      --build-arg FTP_PROXY="${FTP_PROXY}" \
-      --build-arg HTTPS_PROXY="${HTTPS_PROXY}" \
-      --build-arg NO_PROXY="${NO_PROXY}" \
-      --output image.tar.gz
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - image.tar.gz
-  artifacts:
-    name: docker-image
-    paths:
-      - image.tar.gz
-  tags:
-    - docker
-
-docker_publish_production:
-  stage: publish
-  image: ubleipzig/deployer:1.2.4
-  services:
-    - docker:18.09-dind
-  script: |
-    declare version=`expr ${CI_COMMIT_TAG} ':' 'php/\(.\+\)'`
-    declare major_version=`expr ${version} ':' '\([^.]\+\)'`
-    declare minor_version=`expr ${version} ':' '[^.]\+\.\([^.]\+\)'`
-    declare patch_version=`expr ${version} ':' '[^.]\+\.[^.]\+\-\(.\+\)'`
-
-    deployer publish \
-      --input image.tar.gz \
-      --docker-config "${DOCKER_PRODUCTION_AUTH_CONFIG}" \
-      --name ${production_repo} \
-      --tag latest \
-      --tag ${version} \
-      --tag "${major_version}.${minor_version}" \
-      --tag "${major_version}"
-  dependencies:
-    - docker_build
+    mkdir -p ~/.docker && echo "$DOCKER_AUTH_CONFIG" >~/.docker/config.json
+    export version=`expr ${CI_COMMIT_TAG} ':' '\([^-]\+\)'`
+    export major_version=`expr ${version} ':' '\([^.]\+\)'`
+    export minor_version=`expr ${version} ':' '[^.]\+\.\([^-]\+\)'`
+    export suffix=`expr ${CI_COMMIT_TAG} ':' '[^-]\+-\(.*\)'`
+    docker build --pull -t ubleipzig/dev-dotdeb:${version}-${suffix} -f ${version}/Dockerfile .
+    docker push ubleipzig/dev-dotdeb:${version}-${suffix}
+    for tag in "latest" "${major_version}" "${version}"; do
+      if [ "$tag" == "latest" -a "${version}" != "1.13" ]; then continue; fi
+      if [ "$tag" == "1" -a "${version}" != "1.13" ]; then continue; fi
+      docker tag  ubleipzig/dev-dotdeb:${version}-${suffix} ubleipzig/dev-dotdeb:${tag}
+      docker push ubleipzig/dev-dotdeb:${tag}
+    done
   tags:
     - docker
   only:
     - /^php\/.*/
+
+github_mirror:
+  stage: mirror
+  image:
+    name: alpine/git
+    entrypoint: [ "/bin/sh", "-c" ]
+  variables:
+    GIT_STRATEGY: clone
+    GIT_CHECKOUT: "false"
+  script: |
+    cd /tmp
+    git clone --mirror ${CI_REPOSITORY_URL} project
+    cd project
+    git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ubleipzig/ubleipzig/dev-dotdeb.git
+    git push --mirror github
+  tags:
+    - docker
