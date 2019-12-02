@@ -7,12 +7,14 @@ ENTRYPOINT ["/docker/entrypoint"]
 CMD ["run"]
 
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 git \
- && echo "deb http://packages.dotdeb.org stretch all" >/etc/apt/sources.list.d/dotdeb.list \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 git gnupg2 lsb-release openssl ca-certificates apt-transport-https \
+ && echo "deb http://packages.dotdeb.org stretch all" > /etc/apt/sources.list.d/dotdeb.list \
  && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
+ && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
+ && wget -O - https://packages.sury.org/php/apt.gpg | apt-key add - \
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker \
-        php7.2-fpm php7.2-cli php-pear php7.2-curl php7.2-gd php7.2-intl php7.2-ldap php7.2-readline php7.2-mcrypt php7.2-mysqlnd php7.2-sqlite php7.2-xdebug php7.2-xsl php7.2-mbstring php7.2-dev \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y apache2 libapache2-mod-fcgid \
+        php7.2-fpm php7.2-cli php-pear php7.2-curl php7.2-gd php7.2-intl php7.2-ldap php7.2-readline php7.2-mysqlnd php7.2-sqlite php7.2-xdebug php7.2-xsl php7.2-mbstring php7.2-dev \
         make mysql-client mysql-server unzip \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /var/cache/apt/archives/*
