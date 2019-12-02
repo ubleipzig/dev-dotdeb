@@ -8,8 +8,8 @@ dev-dotdeb_image:
   services:
     - docker:18.09-dind
   script: |
-    test "${DOCKER_AUTH_CONFIG}" == "" && echo "docker-config does not exists, aborting!" && false
-    mkdir -p ~/.docker && echo "$DOCKER_AUTH_CONFIG" >~/.docker/config.json
+    test "${DOCKER_PRODUCTION_AUTH_CONFIG}" == "" && echo "docker-config does not exists, aborting!" && false
+    mkdir -p ~/.docker && echo "$DOCKER_PRODUCTION_AUTH_CONFIG" >~/.docker/config.json
     declare version=`expr ${CI_COMMIT_TAG} ':' 'php\([^-]\+\)'`
     declare major_version=`expr ${version} ':' '\([^.]\+\)'`
     declare minor_version=`expr ${version} ':' '[^.]\+\.\([^-]\+\)'`
