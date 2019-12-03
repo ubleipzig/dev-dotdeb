@@ -7,9 +7,9 @@ variables:
 
 dev-dotdeb_build:
   stage: build
-  image: ubleipzig/deployer:1.2.4
+  image: ubleipzig/deployer:1.3.2
   services:
-    - docker:dind:18.09-dind
+    - docker:18.09-dind
   script: |
     deployer build \
       --build-arg HTTP_PROXY="${HTTP_PROXY}" \
@@ -30,9 +30,9 @@ dev-dotdeb_build:
 
 dev-dotdeb_publish:
   stage: publish
-  image: ubleipzig/deployer:1.2.4
+  image: ubleipzig/deployer:1.3.2
   services:
-    - docker:dind
+    - docker:18.09-dind
   script: |
     export version=`expr ${CI_COMMIT_TAG} ':' 'php/\(.\+\)'`
     export major_version=`expr ${version} ':' '\([^.]\+\)'`
