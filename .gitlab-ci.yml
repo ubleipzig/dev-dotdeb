@@ -54,6 +54,7 @@ dev-dotdeb_publish:
     - docker
   only:
     - /^php\/.*/
+    - tags
 
 github_mirror:
   stage: mirror
