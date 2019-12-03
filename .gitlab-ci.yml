@@ -1,13 +1,14 @@
 stages:
   - build
   - publish
+  - mirror
 
 variables:
   production_repo: ubleipzig/dev-dotdeb
 
 dev-dotdeb_build:
   stage: build
-  image: ubleipzig/deployer:1.3.2
+  image: ubleipzig/deployer:1.4.7
   services:
     - docker:18.09-dind
   script: |
@@ -30,7 +31,7 @@ dev-dotdeb_build:
 
 dev-dotdeb_publish:
   stage: publish
-  image: ubleipzig/deployer:1.3.2
+  image: ubleipzig/deployer:1.4.7
   services:
     - docker:18.09-dind
   script: |
@@ -53,3 +54,20 @@ dev-dotdeb_publish:
     - docker
   only:
     - /^php\/.*/
+
+github_mirror:
+  stage: mirror
+  image:
+    name: alpine/git
+    entrypoint: [ "/bin/sh", "-c" ]
+  variables:
+    GIT_STRATEGY: clone
+    GIT_CHECKOUT: "false"
+  script: |
+    cd /tmp
+    git clone --mirror ${CI_REPOSITORY_URL} project
+    cd project
+    git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/${production_repo}.git
+    git push --mirror github
+  tags:
+    - docker
