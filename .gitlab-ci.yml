@@ -1,43 +1,55 @@
 stages:
-  - image
-  - mirror
+  - build
+  - publish
 
-dev-dotdeb_image:
-  stage: image
-  image: docker:latest
+variables:
+  production_repo: ubleipzig/dev-dotdeb
+
+dev-dotdeb_build:
+  stage: build
+  image: ubleipzig/deployer:1.3.2
   services:
-    - docker:18.09-dind
+    - docker:dind:18.09-dind
   script: |
-    test "${DOCKER_PRODUCTION_AUTH_CONFIG}" == "" && echo "docker-config does not exists, aborting!" && false
-    mkdir -p ~/.docker && echo "$DOCKER_PRODUCTION_AUTH_CONFIG" >~/.docker/config.json
-    export version=`expr ${CI_COMMIT_TAG} ':' 'php/\([^-]\+\)'`
+    deployer build \
+      --build-arg HTTP_PROXY="${HTTP_PROXY}" \
+      --build-arg FTP_PROXY="${FTP_PROXY}" \
+      --build-arg HTTPS_PROXY="${HTTPS_PROXY}" \
+      --build-arg NO_PROXY="${NO_PROXY}" \
+      --output image.tar.gz
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - image.tar.gz
+  artifacts:
+    name: docker-image
+    paths:
+      - image.tar.gz
+  tags:
+    - docker
+
+dev-dotdeb_publish:
+  stage: publish
+  image: ubleipzig/deployer:1.3.2
+  services:
+    - docker:dind
+  script: |
+    export version=`expr ${CI_COMMIT_TAG} ':' 'php/\(.\+\)'`
     export major_version=`expr ${version} ':' '\([^.]\+\)'`
-    export minor_version=`expr ${version} ':' '[^.]\+\.\([^-]\+\)'`
-    export suffix=`expr ${CI_COMMIT_TAG} ':' '[^-]\+-\(.*\)'`
-    docker build --pull -t ubleipzig/dev-dotdeb:${version}-${suffix} -f ${version}/Dockerfile .
-    docker push ubleipzig/dev-dotdeb:${version}-${suffix}
-    for tag in "latest" "${major_version}" "${version}"; do
-      docker tag  ubleipzig/dev-dotdeb:${version}-${suffix} ubleipzig/dev-dotdeb:${tag}
-      docker push ubleipzig/dev-dotdeb:${tag}
-    done
+    export minor_version=`expr ${version} ':' '[^.]\+\.\([^.]\+\)'`
+    export patch_version=`expr ${version} ':' '[^.]\+\.[^.]\+\-\(.\+\)'`
+
+    deployer publish \
+      --input image.tar.gz \
+      --docker-config "${DOCKER_PRODUCTION_AUTH_CONFIG}" \
+      --name ${production_repo} \
+      --tag latest \
+      --tag ${version} \
+      --tag "${major_version}.${minor_version}" \
+      --tag "${major_version}"
+  dependencies:
+    - docker_build
   tags:
     - docker
   only:
     - /^php\/.*/
-
-github_mirror:
-  stage: mirror
-  image:
-    name: alpine/git
-    entrypoint: [ "/bin/sh", "-c" ]
-  variables:
-    GIT_STRATEGY: clone
-    GIT_CHECKOUT: "false"
-  script: |
-    cd /tmp
-    git clone --mirror ${CI_REPOSITORY_URL} project
-    cd project
-    git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ubleipzig/ubleipzig/dev-dotdeb.git
-    git push --mirror github
-  tags:
-    - docker
