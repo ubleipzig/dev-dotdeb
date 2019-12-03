@@ -10,7 +10,7 @@ dev-dotdeb_image:
   script: |
     test "${DOCKER_PRODUCTION_AUTH_CONFIG}" == "" && echo "docker-config does not exists, aborting!" && false
     mkdir -p ~/.docker && echo "$DOCKER_PRODUCTION_AUTH_CONFIG" >~/.docker/config.json
-    export version=`expr ${CI_COMMIT_TAG} ':' 'php\([^-]\+\)'`
+    export version=`expr ${CI_COMMIT_TAG} ':' 'php/\([^-]\+\)'`
     export major_version=`expr ${version} ':' '\([^.]\+\)'`
     export minor_version=`expr ${version} ':' '[^.]\+\.\([^-]\+\)'`
     export suffix=`expr ${CI_COMMIT_TAG} ':' '[^-]\+-\(.*\)'`
