@@ -58,7 +58,7 @@ dev-dotdeb_publish:
 github_mirror:
   stage: mirror
   image:
-    name: alpine/git
+    name: alpine/git:1.0.3
     entrypoint: [ "/bin/sh", "-c" ]
   variables:
     GIT_STRATEGY: clone
