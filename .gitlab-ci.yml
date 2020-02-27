@@ -35,7 +35,7 @@ dev-dotdeb_publish:
   services:
     - docker:18.09-dind
   script: |
-    export version=`expr ${CI_COMMIT_TAG} ':' 'php/\(.\+\)'`
+    export version=`expr ${CI_COMMIT_TAG} ':' 'release/\(.\+\)'`
     export major_version=`expr ${version} ':' '\([^.]\+\)'`
     export minor_version=`expr ${version} ':' '[^.]\+\.\([^.]\+\)'`
     export patch_version=`expr ${version} ':' '[^.]\+\.[^.]\+\-\(.\+\)'`
@@ -53,21 +53,18 @@ dev-dotdeb_publish:
   tags:
     - docker
   only:
-    - /^php\/.*/
+    - /^release\/.*/
 
 github_mirror:
   stage: mirror
   image:
-    name: alpine:3.7
+    name: alpine/git:latest
     entrypoint: [ "/bin/sh", "-c" ]
-  variables:
-    GITHUB_URL: https://$GITHUB_USER:$GITHUB_TOKEN@github.com/ubleipzig/dev-dotdeb.git
   script: |
-    apk add git
     cd /tmp
     git clone --mirror ${CI_REPOSITORY_URL} project
     cd project
-    git remote set-url origin ${GITHUB_URL}
-    git push --mirror origin
+    git remote add github https://$GITHUB_USER:$GITHUB_TOKEN@github.com/ubleipzig/dev-dotdeb.git
+    git push --mirror github
   tags:
     - docker
