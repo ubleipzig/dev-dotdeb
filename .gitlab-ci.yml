@@ -58,16 +58,17 @@ dev-dotdeb_publish:
 github_mirror:
   stage: mirror
   image:
-    name: alpine/git
+    name: alpine:3.7
     entrypoint: [ "/bin/sh", "-c" ]
   variables:
     GIT_STRATEGY: clone
     GIT_CHECKOUT: "false"
   script: |
+    apk --nocache add git
     cd /tmp
     git clone --mirror ${CI_REPOSITORY_URL} project
     cd project
-    git remote set-url --push github "https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ubleipzig/dev-dotdeb.git"
+    git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ubleipzig/dev-dotdeb.git
     git push --mirror github
   tags:
     - docker
