@@ -61,14 +61,13 @@ github_mirror:
     name: alpine:3.7
     entrypoint: [ "/bin/sh", "-c" ]
   variables:
-    GIT_STRATEGY: clone
-    GIT_CHECKOUT: "false"
+    GITHUB_URL: https://$GITHUB_USER:$GITHUB_TOKEN@github.com/ubleipzig/dev-dotdeb.git
   script: |
     apk add git
     cd /tmp
     git clone --mirror ${CI_REPOSITORY_URL} project
     cd project
-    git remote set-url origin https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ubleipzig/dev-dotdeb.git
+    git remote set-url origin ${GITHUB_URL}
     git push --mirror origin
   tags:
     - docker
