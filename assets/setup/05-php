@@ -23,9 +23,13 @@ sed -e "s/^\(xdebug\.remote_host\).*\$/\1 = ${DOCKERHOST}/" -i /etc/php/7.2/mods
 
 sed -e "s/^\(user\)\s*=.*\$/\1 = ${APP_USER}/" -i /etc/php/7.2/fpm/pool.d/www.conf
 sed -e "s/^\(group\)\s*=.*\$/\1 = ${APP_USER}/" -i /etc/php/7.2/fpm/pool.d/www.conf
-sed -e "s/^\(listen\)\s*=.*\$/\1 = 127.0.0.1:9000 /" -i /etc/php/7.2/fpm/pool.d/www.conf
+sed -e "s/^\(listen\)\s*=.*\$/\1 = 127.0.0.1:9001 /" -i /etc/php/7.2/fpm/pool.d/www.conf
 
 chown ${APP_USER}:${APP_USER} /var/lib/xdebug -R
+
+if [ ! -d  "/run/php" ]; then
+    mkdir /run/php && chown ${APP_USER} /run/php -R
+fi
 
 cat >/etc/supervisor/conf.d/php-fpm.conf <<EOF
 [program:php-fpm]

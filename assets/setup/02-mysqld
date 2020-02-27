@@ -20,7 +20,7 @@ chown -R mysql:root /var/run/mysqld
 if [ "${DB_HOST}" == "localhost" ]; then
 	if [ ! -d /var/lib/mysql/mysql ]; then
 		echo "Installing database..."
-		zcat /usr/share/doc/mysql-server-5.5/examples/my-huge.cnf.gz >/usr/share/mysql/my-default.cnf
+		#zcat /usr/share/doc/mysql-server-5.5/examples/my-huge.cnf.gz >/usr/share/mysql/my-default.cnf
 		mysql_install_db --user=mysql >/dev/null 2>&1
 
 		# start mysql server
@@ -44,15 +44,17 @@ if [ "${DB_HOST}" == "localhost" ]; then
 		## the debian-sys-maint is used while creating users and database
 		## as well as to shut down or starting up the mysql server via mysqladmin
 		echo "Creating debian-sys-maint user..."
-		mysql -uroot -e "GRANT ALL PRIVILEGES on *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION;"
+		mysql -uroot -e "CREATE USER 'debian-sys-maint'@'localhost' IDENTIFIED BY '';"
+		mysql -uroot -e "GRANT ALL PRIVILEGES on *.* TO 'debian-sys-maint'@'localhost' WITH GRANT OPTION;"
 
         echo "Granting root permission from Docker Host ..."
+        mysql -uroot -e "CREATE USER root@${DOCKERHOST};"
         mysql -uroot -e "GRANT all PRIVILEGES on *.* to root@${DOCKERHOST} WITH GRANT OPTION;"
 
-		echo "Setting root user password"
+        echo "Setting root user password"
 		/usr/bin/mysqladmin -u root password "${DB_PASS}"
 
-		/usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf shutdown
+        /usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf shutdown
 	fi
 
 	if [ "${SQL_MODE}" != "" ];then

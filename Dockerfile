@@ -6,6 +6,7 @@ VOLUME ["/var/lib/mysql", "/var/run/mysqld", "/app", "/var/lib/xdebug"]
 ENTRYPOINT ["/docker/entrypoint"]
 CMD ["run"]
 
+
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 git gnupg2 lsb-release openssl ca-certificates apt-transport-https \
  && echo "deb http://packages.dotdeb.org stretch all" > /etc/apt/sources.list.d/dotdeb.list \
