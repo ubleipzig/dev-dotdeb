@@ -37,8 +37,8 @@ dev-dotdeb_publish:
   script: |
     export version=`expr ${CI_COMMIT_TAG} ':' 'release/\(.\+\)'`
     export major_version=`expr ${version} ':' '\([^.]\+\)'`
-    export minor_version=`expr ${version} ':' '[^.]\+\.\([^.]\+\)'`
-    export patch_version=`expr ${version} ':' '[^.]\+\.[^.]\+\-\(.\+\)'`
+    export minor_version=`expr ${version} ':' '[^.]\+\.\([^.-]\+\)'`
+    export patch_version=`expr ${version} ':' '[^.]\+\.[^.]\+[-.]\(.\+\)'`
 
     deployer publish \
       --input image.tar.gz \

@@ -20,7 +20,6 @@ chown -R mysql:root /var/run/mysqld
 if [ "${DB_HOST}" == "localhost" ]; then
 	if [ ! -d /var/lib/mysql/mysql ]; then
 		echo "Installing database..."
-		#zcat /usr/share/doc/mysql-server-5.5/examples/my-huge.cnf.gz >/usr/share/mysql/my-default.cnf
 		mysql_install_db --user=mysql >/dev/null 2>&1
 
 		# start mysql server

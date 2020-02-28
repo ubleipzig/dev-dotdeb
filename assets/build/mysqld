@@ -16,9 +16,9 @@ sed 's/^log_error/# log_error/' -i /etc/mysql/my.cnf
 sed 's/password = .*/password = /g' -i /etc/mysql/debian.cnf
 
 # listen on all interfaces
-cat > /etc/mysql/conf.d/mysql-listen.cnf <<EOF
+cat > /etc/mysql/mariadb.conf.d/90-server.cnf <<EOF
 [mysqld]
-bind = 0.0.0.0
+bind-address = 0.0.0.0
 EOF
 
 # Fixing StartUp Porblems with some DNS Situations and Speeds up the stuff
