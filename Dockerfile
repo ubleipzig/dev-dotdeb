@@ -1,5 +1,5 @@
 ### install debian ###
-FROM debian:stretch
+FROM debian:stretch-slim
 LABEL authors="Ulf Seltmann <ulf.seltmann@metaccount.de>, Frank Morgner <morgnerf@ub.uni-leipzig.de>"
 EXPOSE 80 443 3306
 VOLUME ["/var/lib/mysql", "/var/run/mysqld", "/app", "/var/lib/xdebug"]
@@ -15,7 +15,7 @@ RUN apt-get update \
  && wget -O - https://packages.sury.org/php/apt.gpg | apt-key add - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y apache2 libapache2-mod-fcgid \
-        php7.2-fpm php7.2-cli php-pear php7.2-curl php7.2-gd php7.2-intl php7.2-ldap php7.2-readline php7.2-mysqlnd php7.2-sqlite php7.2-xdebug php7.2-xsl php7.2-mbstring php7.2-dev \
+        php7.2-fpm php7.2-cli php-pear php7.2-curl php7.2-gd php7.2-intl php7.2-ldap php7.2-readline php7.2-mysqlnd php7.2-sqlite php7.2-xdebug php7.2-xsl php7.2-mbstring php7.2-dev php7.2-soap php7.2-zip \
         make mysql-client mysql-server unzip \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /var/cache/apt/archives/*
@@ -24,7 +24,7 @@ ENV APP_HOME=/app \
  APP_USER=dev \
  FCGID_MAX_REQUEST_LEN=16384000 \
  TIME_ZONE=Europe/Berlin \
- WEBGRIND_ARCHIVE=v1.6.1 \
+ WEBGRIND_ARCHIVE=v1.8.0 \
  WEBGRIND_FORK=jokkedk \
  SHIB_HOSTNAME=https://localhost \
  SHIB_HANDLER_URL=/Shibboleth.sso \
