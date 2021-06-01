@@ -6,7 +6,7 @@ unzip ${WEBGRIND_ARCHIVE}.zip -d /var/www/
 rm ${WEBGRIND_ARCHIVE}.zip
 
 cat >/etc/apache2/sites-available/00-webgrind.conf <<EOF
-Alias /webgrind /var/www/webgrind-${WEBGRIND_ARCHIVE}
+Alias /webgrind /var/www/webgrind-${WEBGRIND_ARCHIVE:1}
 EOF
 
 a2ensite 00-webgrind

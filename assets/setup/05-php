@@ -19,7 +19,7 @@ sed -e "s/^\(post_max_size\)\s*=.*\$/\1 = 2G/" -i /etc/php/7.2/fpm/php.ini
 sed -e "s/^\(upload_max_filesize\)\s*=.*\$/\1 = 2G/" -i /etc/php/7.2/fpm/php.ini
 sed -e "s/^;\?\s*\(always_populate_raw_post_data\)\s*=.*\$/\1 = -1/" -i /etc/php/7.2/fpm/php.ini
 sed -e "s/^;\?\s*\(max_input_vars\)\s*=.*\$/\1 = 1500/" -i /etc/php/7.2/fpm/php.ini
-sed -e "s/^\(xdebug\.remote_host\).*\$/\1 = ${DOCKERHOST}/" -i /etc/php/7.2/mods-available/xdebug.ini
+sed -e "s/^\(xdebug\.client_host\).*\$/\1 = ${DOCKERHOST}/" -i /etc/php/7.2/mods-available/xdebug.ini
 
 sed -e "s/^\(user\)\s*=.*\$/\1 = ${APP_USER}/" -i /etc/php/7.2/fpm/pool.d/www.conf
 sed -e "s/^\(group\)\s*=.*\$/\1 = ${APP_USER}/" -i /etc/php/7.2/fpm/pool.d/www.conf
