@@ -10,10 +10,9 @@ It is out of the box usable on linux hosts with a docker version >= 1.3
 
 The image prepares apache2, php and mysql and wraps around your local codebase.
 
-the following tools next to apache2, php 7.x (depending on the label) and mysql are at your service:
+the following tools next to apache2, php 7.2 (depending on the label) and mysql are at your service:
 
 * xdebug
-* webgrind
 * phpinfo
 
 
@@ -34,20 +33,9 @@ By default php is configured up to start a debugging session indicated by reques
 with several browser-addons (e.g. [xdebug-helper for chrome][3]). Therefore the IDE should be configured to accept remotely
 started debugging sessions.
 
-## How to to profile
-
-Also xdebug is able to profile script runs. The trace protocols can be used to determine potential performance issues.
-A tool that analyses that protocols is [webgrind][1] which is integrated in the docker image and reachable here
-
-http://127.0.0.1/webgrind
-
 ## PHPINFO
 
 Look at the PHP-configuration at http://127.0.0.1/phpinfo
-
-## XCache (only in php54 and php55)
-
-Look at the XCache statistics at http://127.0.0.1/xcache
 
 ## How to test mail send
 
